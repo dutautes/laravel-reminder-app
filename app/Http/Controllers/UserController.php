@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -60,5 +62,42 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function signUp(Request $request)
+    {
+        // (Request $request) : class untuk mengambil value dari formulir
+        // validasi = validate();
+        $request->validate([
+            'first_name' => 'required|min:3',
+            'last_name' => 'required|min:3',
+            'email' => 'required|email:dns',
+            'password' =>'required|min:8'
+        ],
+        [
+            // pesan custom error
+            // 'name_input.validasi' => 'person'1
+            'first_name.required' => 'Nama depan wajib diisi',
+            'first_name.min' => 'Nama depan wajib diisi minimal 3 huruf',
+            'last_name.required' => 'Nama belakang wajib diisi',
+            'last_name.min' => 'Nama belakang wajib diisi minimal 3 huruf',
+            'email.required' => 'Email wajib diisi',
+            'email.email' => 'Email wajib diisi dengan data yang valid',
+            'password.required' => 'Password wajib diisi',
+            'password.min' => 'Password wajib diisi minimal 8 huruf',
+        ]);
+
+        $createUser = User::create([
+            'name' => $request->first_name . " " . $request->last_name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'user'
+        ]);
+
+        if ($createUser) {
+            return redirect()->route('login')->with('success', 'Silahkan login!');
+        } else {
+            return redirect()->back()->with('error', 'Gagal! silahkan coba lagi');
+        }
     }
 }

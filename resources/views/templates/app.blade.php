@@ -42,12 +42,12 @@
                 <!-- Left links -->
 
                 <div class="d-flex align-items-center">
-                    <button data-mdb-ripple-init type="button" class="btn btn-link px-3 me-2">
+                    <a href="" data-mdb-ripple-init type="button" class="btn btn-link px-3 me-2">
                         Login
-                    </button>
-                    <button data-mdb-ripple-init type="button" class="btn btn-primary me-3">
+                    </a>
+                    <a href="{{ route('signup') }}" data-mdb-ripple-init type="button" class="btn btn-primary me-3">
                         Sign up
-                    </button>
+                    </a>
                 </div>
             </div>
             <!-- Collapsible wrapper -->
