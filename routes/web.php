@@ -16,3 +16,12 @@ Route::get('/login', function () {
 })->name('login');
 
 Route::post('/sign-up', [UserController::class, 'SignUp' ])->name('sign_up.add');
+Route::post('/login', [UserController::class, 'loginAuth'])->name('login.auth');
+Route::get('/logout', [UserController::class, 'logout'])->name('logout');
+
+Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function() {
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('dashboard');
+});
+

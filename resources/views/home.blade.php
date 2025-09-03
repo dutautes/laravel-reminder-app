@@ -1,7 +1,13 @@
 @extends('templates.app')
 
 @section('content')
-    <div class="container d-flex align-content-center mt-4 gap-2">
+    <div class="container d-flex flex-column align-content-center mt-4 gap-2">
+        @if (Session::get('success'))
+            <div class="alert alert-success w-100">Berhasil login, <b>Selamat datang! {{ Auth::user()->name }}</b></div>
+        @endif
+        @if (Session::get('logout'))
+            <div class="alert alert-warning w-100">{{ Session::get('logout') }}</div>
+        @endif
         {{-- card 1 --}}
         <div class="card">
             <div class="card-body">

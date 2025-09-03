@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -99,5 +100,34 @@ class UserController extends Controller
         } else {
             return redirect()->back()->with('error', 'Gagal! silahkan coba lagi');
         }
+    }
+
+    public function loginAuth(Request $request) {
+        $request->validate([
+            'email' => 'required',
+            'password' => 'required'
+        ],
+        [
+            'email.required' => 'Email harus di isi',
+            'password.required' => "Password harus di isi"
+        ]);
+
+        $data = $request->only(['email', 'password']);
+
+        if (Auth::attempt($data)) {
+            if (Auth::user()->role == 'admin') {
+                return redirect()->route('admin.dashboard')->with('success', 'Berhasil login!');
+            } else {
+                return redirect()->route('home')->with('success', 'Berhasil login!');
+            }
+            return redirect()->route('home')->with('success', 'Berhasil login!');
+        } else {
+            return redirect()->back()->with('error', 'Gagal login! pastikan data sudah sesuai');
+        }
+    }
+
+    public function logout() {
+        Auth::logout();
+        return redirect()->route('home')->with('logout', 'Berhasil logout!, silahkan login kembali untuk akses lengkap');
     }
 }

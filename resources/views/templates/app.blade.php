@@ -35,19 +35,36 @@
             <div class="collapse navbar-collapse" id="navbarButtonsExample">
                 <!-- Left links -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Beranda</a>
-                    </li>
+                    @if (Auth::check() && Auth::user()->role == 'admin')
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Data User</a>
+                        </li>
+                    @else
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('home') }}">Beranda</a>
+                        </li>
+                    @endif
                 </ul>
                 <!-- Left links -->
 
                 <div class="d-flex align-items-center">
-                    <a href="" data-mdb-ripple-init type="button" class="btn btn-link px-3 me-2">
-                        Login
-                    </a>
-                    <a href="{{ route('signup') }}" data-mdb-ripple-init type="button" class="btn btn-primary me-3">
-                        Sign up
-                    </a>
+                    @if (Auth::check())
+                        <a href="{{ route('logout') }}" data-mdb-ripple-init type="button" class="btn btn-danger">
+                            Logout
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}" data-mdb-ripple-init type="button"
+                            class="btn btn-link px-3 me-2">
+                            Login
+                        </a>
+                        <a href="{{ route('signup') }}" data-mdb-ripple-init type="button"
+                            class="btn btn-primary me-3">
+                            Sign up
+                        </a>
+                    @endif
                 </div>
             </div>
             <!-- Collapsible wrapper -->
@@ -61,10 +78,11 @@
         <!-- Copyright -->
         <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
             © 2025 Copyright:
-            <a class="text-body" href="https://mdbootstrap.com/">dutasuksesif@gmail.com</a>
+            <a class="text-body" href="#">dutasuksesif@gmail.com</a>
         </div>
         <!-- Copyright -->
     </footer>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/9.1.0/mdb.umd.min.js"></script>
 </body>
 
 </html>
