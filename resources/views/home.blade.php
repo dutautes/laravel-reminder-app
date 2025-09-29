@@ -8,32 +8,20 @@
         @if (Session::get('logout'))
             <div class="alert alert-warning w-100">{{ Session::get('logout') }}</div>
         @endif
-        {{-- card 1 --}}
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-                    content.</p>
-                <button type="button" class="btn btn-primary" data-mdb-ripple-init>Button</button>
-            </div>
-        </div>
-        {{-- card 2 --}}
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-                    content.</p>
-                <button type="button" class="btn btn-primary" data-mdb-ripple-init>Button</button>
-            </div>
-        </div>
-        {{-- card 3 --}}
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-                    content.</p>
-                <button type="button" class="btn btn-primary" data-mdb-ripple-init>Button</button>
-            </div>
+
+        <div class="jumbotron d-flex flex-column justify-content-center align-items-center text-center"
+            style="background: linear-gradient(135deg, #2476fb 0%, #4290f5 100%); border-radius: 2rem; min-height: 60vh; box-shadow: 0 4px 24px rgba(0,0,0,0.08); padding: 3rem 2rem;">
+            <span class="text-secondary" style="font-size: 5rem;">
+                <i class="fa-regular fa-sticky-note"></i>
+            </span>
+            <h2 class="mb-3 fw-bold" style="color: #fff;">NotesApp</h2>
+            <p class="mb-4" style="color: #fff; font-size: 1.1rem;">
+                Selamat datang di <b>NotesApp</b>! Catat ide, tugas, dan pengingatmu dengan mudah dan aman.<br>
+                Mulai produktif dan jangan lewatkan satu hal pun!
+            </p>
+            <a href="" class="btn btn-light fw-bold px-4 py-2 shadow-sm">
+                Mulai Mencatat
+            </a>
         </div>
     </div>
 @endsection

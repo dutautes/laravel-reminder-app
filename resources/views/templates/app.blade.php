@@ -16,13 +16,12 @@
 
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm py-2" style="background: #f8f9fa;">
         <!-- Container wrapper -->
         <div class="container d-flex justify-content-center align-items-center">
             <!-- Navbar brand -->
-            <a class="navbar-brand me-2" href="https://mdbgo.com/">
-                <img src="https://upload.wikimedia.org/wikipedia/en/d/df/Remind_app_logo.png" height="16"
-                    alt="MDB Logo" loading="lazy" style="margin-top: -1px;" />
+            <a class="navbar-brand me-4 fw-bold text-primary" href="#" style="font-size: 1.5rem;">
+                <i class="fa-regular fa-note-sticky me-2"></i>NotePro
             </a>
 
             <!-- Toggle button -->
@@ -37,31 +36,60 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     @if (Auth::check() && Auth::user()->role == 'admin')
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Dashboard</a>
+                            <a class="nav-link active fw-semibold" href="#" style="color: #0d6efd;">Dashboard</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Data User</a>
+                            <a class="nav-link fw-semibold" href="#" style="color: #0d6efd;">Data User</a>
                         </li>
                     @else
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('home') }}">Beranda</a>
+                            <a class="nav-link active fw-semibold custom-hover-underline" href="{{ route('home') }}"
+                                style="color: #0d6efd;">Beranda</a>
+                        </li>
+                        <style>
+                            .custom-hover-underline {
+                                position: relative;
+                                transition: color 0.2s;
+                            }
+
+                            .custom-hover-underline::after {
+                                content: '';
+                                position: absolute;
+                                left: 0;
+                                bottom: 0;
+                                width: 0;
+                                height: 1.5px;
+                                background: #0d6efd;
+                                transition: width 0.3s;
+                            }
+
+                            .custom-hover-underline:hover::after {
+                                width: 100%;
+                            }
+                        </style>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link fw-semibold custom-hover-underline">Projects</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link fw-semibold custom-hover-underline">Reminder</a>
                         </li>
                     @endif
                 </ul>
                 <!-- Left links -->
 
-                <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center gap-2">
                     @if (Auth::check())
-                        <a href="{{ route('logout') }}" data-mdb-ripple-init type="button" class="btn btn-danger">
+                        <a href="{{ route('logout') }}" data-mdb-ripple-init type="button"
+                            class="btn btn-danger px-4 rounded-pill shadow-sm">
                             Logout
                         </a>
                     @else
                         <a href="{{ route('login') }}" data-mdb-ripple-init type="button"
-                            class="btn btn-link px-3 me-2">
+                            class="btn btn-link px-3 me-2 fw-semibold text-primary">
                             Login
                         </a>
                         <a href="{{ route('signup') }}" data-mdb-ripple-init type="button"
-                            class="btn btn-primary me-3">
+                            class="btn btn-primary me-3 px-4 rounded-pill shadow-sm">
                             Sign up
                         </a>
                     @endif
@@ -74,7 +102,7 @@
     <!-- Navbar -->
     @yield('content');
     {{-- Footer --}}
-    <footer class="bg-body-tertiary text-center text-lg-start">
+    <footer class="bg-body-tertiary text-center text-lg-start" style="margin-top: 10rem">
         <!-- Copyright -->
         <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
             © 2025 Copyright:
