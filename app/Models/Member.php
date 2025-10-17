@@ -5,18 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
-class Task extends Model
+class Member extends Model
 {
     use SoftDeletes;
-    // daftarin tabel kecuali id sama datetime
+    // daftarin nama column selain id dan timestamp
     protected $fillable = [
         'project_id',
-        'assigned_to',
-        'title',
-        'description',
-        'status',
-        'deadline',
+        'user_id',
+        'role_in_project',
     ];
 
     public function project()
@@ -24,8 +20,8 @@ class Task extends Model
         return $this->belongsTo(Project::class);
     }
 
-    public function assignedUser()
+    public function user()
     {
-        return $this->belongsTo(User::class, 'assigned_to');
+        return $this->belongsTo(User::class);
     }
 }

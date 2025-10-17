@@ -5,27 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
-class Task extends Model
+class Client extends Model
 {
     use SoftDeletes;
-    // daftarin tabel kecuali id sama datetime
+    //
     protected $fillable = [
-        'project_id',
-        'assigned_to',
-        'title',
-        'description',
+        'name',
+        'email',
+        'alamat_kota',
         'status',
-        'deadline',
     ];
 
     public function project()
     {
         return $this->belongsTo(Project::class);
-    }
-
-    public function assignedUser()
-    {
-        return $this->belongsTo(User::class, 'assigned_to');
     }
 }

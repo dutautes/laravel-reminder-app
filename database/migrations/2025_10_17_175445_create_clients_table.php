@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('projects', function (Blueprint $table) {
+        Schema::create('clients', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('owner_id')->constrained('user');
             $table->string('name');
-            $table->text('description');
-            $table->datetime('deadline');
+            $table->string('email')->unique();
+            $table->string('alamat');
+            $table->enum('status', ['active', 'inactive', 'pending']);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('projects');
+        Schema::dropIfExists('clients');
     }
 };

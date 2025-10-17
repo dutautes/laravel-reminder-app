@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('projects', function (Blueprint $table) {
+        Schema::create('members', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('owner_id')->constrained('user');
-            $table->string('name');
-            $table->text('description');
-            $table->datetime('deadline');
+            $table->foreignId('project_id')->constrained('projects')->unique();
+            $table->foreignId('user_id')->constrained('users')->unique();
+            $table->enum('role_in_porject', ['frontend', 'backend', 'designer', 'fullstack']);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('projects');
+        Schema::dropIfExists('members');
     }
 };

@@ -13,7 +13,14 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('project_id')->constrained('projects');
+            $table->foreignId('assigned_to')->constrained('users')->nullable();
+            $table->string('title');
+            $table->text('description');
+            $table->enum('status', ['todo', 'doing', 'done']);
+            $table->datetime('deadline');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
