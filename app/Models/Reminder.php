@@ -19,4 +19,9 @@ class Reminder extends Model
         'repeat',
         'status'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

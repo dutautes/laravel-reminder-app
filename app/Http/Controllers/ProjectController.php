@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Reminder;
+use App\Models\Project;
 use Illuminate\Http\Request;
 
-class ReminderController extends Controller
+class ProjectController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $reminders = Reminder::all();
-        return view('reminder.index', compact('reminders'));
+        //
     }
 
     /**
@@ -35,7 +34,7 @@ class ReminderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Reminder $reminder)
+    public function show(Project $project)
     {
         //
     }
@@ -43,7 +42,7 @@ class ReminderController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Reminder $reminder)
+    public function edit(Project $project)
     {
         //
     }
@@ -51,7 +50,7 @@ class ReminderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Reminder $reminder)
+    public function update(Request $request, Project $project)
     {
         //
     }
@@ -59,7 +58,7 @@ class ReminderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Reminder $reminder)
+    public function destroy(Project $project)
     {
         //
     }
