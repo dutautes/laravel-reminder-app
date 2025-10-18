@@ -108,13 +108,37 @@ class UserController extends Controller
             return redirect()->back()->with('error', 'Gagal mengupdate data user');
         }
     }
-
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $deleteUser = User::where('id', $id)->delete();
+        if ($deleteUser) {
+            return redirect()->route('admin.users.index')->with('success', 'Berhasil menghapus data user');
+        } else {
+            return redirect()->back()->with('success', 'Gagal menghapus data user!');
+        }
+    }
+
+    public function trash()
+    {
+        $userTrash = User::onlyTrashed()->get();
+        return view('admin.user.trash', compact('userTrash'));
+    }
+
+    public function restore($id)
+    {
+        $user = User::onlyTrashed()->find($id);
+        $user->restore();
+        return redirect()->route('admin.users.index')->with('success', 'Berhasil mengembalikan data user');
+    }
+
+    public function deletePermanent($id)
+    {
+        $user = User::onlyTrashed()->find($id);
+        $user->forceDelete();
+        return redirect()->back()->with('success', 'Berhasil menghapus data secara permanen!');
     }
 
     public function signUp(Request $request)

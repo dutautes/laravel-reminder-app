@@ -1,10 +1,21 @@
 @extends('templates.app')
 
 @section('content')
+    @if (Session::get('success'))
+        <div class="alert alert-success alert-dismissible fade show alert-top-right" role="alert">
+            {{ Session::get('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+    @if (Session::get('failed'))
+        <div class="alert alert-danger">
+            {{ Session::get('failed') }}
+        </div>
+    @endif
     <div class="container mt-3">
         <div class="d-flex justify-content-end mb-3 mt-4">
             <a href="" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#modalAdd">Tambah Data</a>
-            <a href="" class="btn btn-warning">Data Sampah</a>
+            <a href="{{ route('admin.users.trash') }}" class="btn btn-warning">Data Sampah</a>
         </div>
 
         <h3>Data Pengguna</h3>
@@ -33,9 +44,9 @@
                     @endif
                     <td class="d-flex gap-2 justify-content-center">
                         <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-primary mb-3">Edit</a>
-                        <form action="" method="POST">
-                            {{-- @csrf
-                            @method('DELETE') --}}
+                        <form action="{{ route('admin.users.delete', $user->id) }}" method="POST">
+                            @csrf
+                            @method('DELETE')
                             <button type="submit" class="btn btn-danger ms-2">Hapus</button>
                         </form>
                     </td>

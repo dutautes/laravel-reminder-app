@@ -43,6 +43,14 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function (
         Route::get('/edit/{id}', [UserController::class, 'edit'])->name('edit');
         // update
         Route::put('/update/{id}', [UserController::class, 'update'])->name('update');
+        // delete
+        Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('delete');
+        // trash
+        Route::get('/trash', [UserController::class, 'trash'])->name('trash');
+        // restore
+        Route::patch('/restore/{id}', [UserController::class, 'restore'])->name('restore');
+        // delete permanen
+        Route::delete('/delete-permanent/{id}', [UserController::class, 'deletePermanent'])->name('delete_permanent');
     });
 });
 
