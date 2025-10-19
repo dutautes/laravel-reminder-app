@@ -14,8 +14,9 @@
     @endif
     <div class="container mt-3">
         <div class="d-flex justify-content-end mb-3 mt-4">
-            <a href="" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#modalAdd">Tambah Data</a>
-            <a href="{{ route('admin.users.trash') }}" class="btn btn-warning">Data Sampah</a>
+            <a href="{{ route('admin.users.export') }}" class="btn btn-secondary me-2">Export (.xlsx)</a>
+            <a href="{{ route('admin.users.trash') }}" class="btn btn-warning me-2">Data Sampah</a>
+            <a href="" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAdd">Tambah Data</a>
         </div>
 
         <h3>Data Pengguna</h3>

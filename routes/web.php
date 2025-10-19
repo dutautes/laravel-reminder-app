@@ -51,6 +51,8 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function (
         Route::patch('/restore/{id}', [UserController::class, 'restore'])->name('restore');
         // delete permanen
         Route::delete('/delete-permanent/{id}', [UserController::class, 'deletePermanent'])->name('delete_permanent');
+        // export
+        Route::get('/export', [UserController::class, 'export'])->name('export');
     });
 });
 

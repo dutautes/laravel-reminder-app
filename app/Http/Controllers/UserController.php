@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UserExport;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel; // class laravel excel
+use Yajra\DataTables\Facades\DataTables; // class laravel yajra : datatables
 
 class UserController extends Controller
 {
@@ -211,5 +214,11 @@ class UserController extends Controller
     {
         Auth::logout();
         return redirect()->route('home')->with('logout', 'Berhasil logout!, silahkan login kembali untuk akses lengkap');
+    }
+
+    public function export()
+    {
+        $fileName = 'data-user-reminder.xlsx';
+        return Excel::download(new UserExport, $fileName);
     }
 }
