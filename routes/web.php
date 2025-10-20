@@ -53,6 +53,8 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function (
         Route::delete('/delete-permanent/{id}', [UserController::class, 'deletePermanent'])->name('delete_permanent');
         // export
         Route::get('/export', [UserController::class, 'export'])->name('export');
+        // datatables
+        Route::get('/datatables', [UserController::class, 'datatables'])->name('datatables');
     });
 });
 

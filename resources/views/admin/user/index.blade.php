@@ -100,7 +100,7 @@
     </div>
 @endsection
 
-@push('stack')
+@push('script')
     @if ($errors->any())
         <script>
             let modalAdd = document.querySelector("#modalAdd");
@@ -111,4 +111,38 @@
             new bootstrap.Modal(modalEdit).show();
         </script>
     @endif
+    <script>
+        $(function() {
+            $('#usersTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('admin.users.datatables') }}",
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'email',
+                        name: 'email'
+                    },
+                    {
+                        data: 'role_badge',
+                        name: 'role_badge',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                    },
+                ]
+            })
+        })
+    </script>
 @endpush

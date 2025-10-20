@@ -48,7 +48,7 @@
                     class="form-control @error('password') is-invalid @enderror">
             </div>
             <div class="d-flex justify-content-end align-items-center">
-                <a class="btn btn-secondary me-2" href="{{ redirect()->back() }}">Kembali</a>
+                <a class="btn btn-secondary me-2" href="{{ route('admin.users.index') }}">Kembali</a>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </form>

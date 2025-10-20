@@ -12,6 +12,10 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
     <!-- MDB -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/9.1.0/mdb.min.css" rel="stylesheet" />
+    {{-- CDN jquery releases.jquery.com (minifed) --}}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css">
     {{-- css --}}
     <style>
         :root {
@@ -161,7 +165,9 @@
         <!-- Copyright -->
     </footer>
 
-
+    @stack('script')
+    {{-- datatable CDN (cdn.datatables.net) --}}
+    <script src="https://cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
     {{-- mdb bootstrap --}}
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/9.1.0/mdb.umd.min.js"></script>
     {{-- bootstrap --}}

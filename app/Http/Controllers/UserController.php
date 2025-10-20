@@ -221,4 +221,29 @@ class UserController extends Controller
         $fileName = 'data-user-reminder.xlsx';
         return Excel::download(new UserExport, $fileName);
     }
+
+    public function datatables()
+    {
+        $users = User::query();
+        return DataTables::of($users)
+            ->addIndexColumn()
+            ->addColumn('role_badge', function ($user) {
+                if ($user['role'] == 'admin') {
+                    return '<span class="badge bg-primary">' . $user['role'] . '</span>';
+                } else {
+                    return '<span class="badge bg-secondary">' . $user['role'] . '</span>';
+                }
+            })
+            ->addColumn('action', function ($user) {
+                $btnEdit = '<a href="' . route('admin.users.edit', $user->id) . '" class="btn btn-primary">Edit</a>';
+                $btnDelete = '<form action="' . route('admin.users.delete', $user->id) . '" method="POST" style="display:inline-block">
+                            ' . csrf_field() . method_field('DELETE') . '
+                            <button type="submit" class="btn btn-danger">Hapus</button>
+                          </form>';
+
+                return '<div class="d-flex justify-content-center align-items-center gap-2">' . $btnEdit . $btnDelete . '</div>';
+            })
+            ->rawColumns(['role_badge', 'action'])
+            ->make(true);
+    }
 }
