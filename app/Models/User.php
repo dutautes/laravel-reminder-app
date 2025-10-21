@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -20,8 +21,12 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
+        'headline',
+        'about',
+        'profile_photo',
         'role'
     ];
 
@@ -47,6 +52,19 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // helper
+    public function profilePhotoUrl()
+    {
+        if ($this->profile_photo && Storage::disk('public')->exists($this->profile_photo)) {
+            return asset('storage/' . $this->profile_photo);
+        }
+
+        $name = $this->name ?? $this->username ?? 'User';
+        $encodedName = urlencode($name);
+        return "https://ui-avatars.com/api/?name={$encodedName}&background=0D8ABC&color=fff&rounded=true&size=256";
+    }
+
 
     public function reminders()
     {

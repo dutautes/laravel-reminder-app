@@ -116,10 +116,17 @@
                                 User</a>
                         </li>
                     @else
-                        <li class="nav-item">
-                            <a class="nav-link fw-semibold custom-hover-underline {{ request()->routeIs('home') ? 'active' : '' }}"
-                                href="{{ route('dashboard') }}">Beranda</a>
-                        </li>
+                        @if (Auth::check() && Auth::user()->role == 'user')
+                            <li class="nav-item">
+                                <a class="nav-link fw-semibold {{ request()->routeIs('dashboard') ? 'active' : '' }}"
+                                    href="{{ route('dashboard') }}">Dashboard</a>
+                            </li>
+                        @else
+                            <li class="nav-item">
+                                <a class="nav-link fw-semibold custom-hover-underline {{ request()->routeIs('home') ? 'active' : '' }}"
+                                    href="{{ route('home') }}">Beranda</a>
+                            </li>
+                        @endif
                         <li class="nav-item">
                             <a href="#" class="nav-link fw-semibold custom-hover-underline">Projects</a>
                         </li>
@@ -133,10 +140,39 @@
 
                 <div class="d-flex align-items-center gap-2">
                     @if (Auth::check())
-                        <a href="{{ route('logout') }}" data-mdb-ripple-init type="button"
-                            class="btn btn-danger px-4 shadow-sm">
-                            Logout
-                        </a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#"
+                                id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="{{ Auth::user()->profilePhotoUrl() }}" alt="Profile"
+                                    class="rounded-circle me-2" width="36" height="36"
+                                    style="object-fit: cover;">
+                            </a>
+
+                            <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="profileDropdown">
+                                <li class="px-3 py-2 text-center">
+                                    <img src="{{ Auth::user()->profilePhotoUrl() }}" class="rounded-circle mb-2"
+                                        width="60" height="60" style="object-fit: cover;">
+                                    <div class="fw-semibold">{{ Auth::user()->name }}</div>
+                                    @if (Auth::user()->username)
+                                        <small class="text-muted">{{ '@' . Auth::user()->username }}</small>
+                                    @endif
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="{{ route('user.settings') }}">Profil Saya</a></li>
+                                <li><a class="dropdown-item" href="#">Pengaturan</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a href="{{ route('logout') }}" data-mdb-ripple-init type="button"
+                                        class="text-danger dropdown-item d-inline">
+                                        Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                     @else
                         <a href="{{ route('login') }}" data-mdb-ripple-init type="button"
                             class="btn btn-link px-3 me-2 fw-semibold text-primary">

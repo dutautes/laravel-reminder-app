@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('owner_id')->constrained('user');
+            $table->foreignId('owner_id')->constrained('users');
             $table->string('name');
             $table->text('description');
             $table->datetime('deadline');

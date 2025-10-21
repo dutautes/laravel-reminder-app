@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel; // class laravel excel
 use Yajra\DataTables\Facades\DataTables; // class laravel yajra : datatables
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -245,5 +247,101 @@ class UserController extends Controller
             })
             ->rawColumns(['role_badge', 'action'])
             ->make(true);
+    }
+
+    public function settings()
+    {
+        $user = Auth::user();
+        return view('user.settings', compact('user'));
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $user = User::find(Auth::id());
+        if (!$user) {
+            return redirect()->back()->with('error', 'User tidak ditemukan.');
+        }
+
+        $request->validate(
+            [
+                'name' => 'required|string|max:255',
+                'username' => ['nullable', 'string', 'max:255', Rule::unique('users')->ignore($user->id)],
+                'headline' => 'nullable|string|max:255',
+                'about' => 'nullable|string|max:1000',
+                'profile_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+                'password' => 'nullable|confirmed|min:8',
+            ],
+            [
+                'name.required' => 'Nama wajib diisi',
+                'username.unique' => 'Username sudah dipakai',
+                'profile_photo.image' => 'File harus berupa gambar',
+                'profile_photo.mimes' => 'Format gambar harus jpg/jpeg/png',
+                'profile_photo.max' => 'Ukuran gambar maksimal 2MB',
+                'password.min' => 'Password minimal 8 karakter',
+                'password.confirmed' => 'Konfirmasi password tidak cocok',
+            ]
+        );
+
+        $data = [
+            'name' => $request->name,
+            'username' => $request->username,
+            'headline' => $request->headline,
+            'about' => $request->about,
+        ];
+
+        // handle upload foto
+        if ($request->hasFile('profile_photo')) {
+            // hapus file lama kalo ada
+            if ($user->profile_photo && Storage::disk('public')->exists('profile_photo')) {
+                Storage::disk('public')->delete('profile_photo');
+            }
+
+            $path = $request->file('profile_photo')->store('profile_photos', 'public');
+            $data['profile_photo'] = $path;
+        }
+
+        // Handle password (jika diisi)
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
+        }
+
+        // Update pake where->update (sesuai gaya "cek hasil")
+        $updated = User::where('id', $user->id)->update($data);
+
+        if ($updated) {
+            return redirect()->back()->with('success', 'Profil berhasil diperbarui.');
+        } else {
+            return redirect()->back()->with('error', 'Tidak ada perubahan yang disimpan atau gagal menyimpan.');
+        }
+    }
+
+    public function deleteAccount(Request $request)
+    {
+        $request->validate(
+            [
+                'password' => 'required',
+            ],
+            [
+                'password.required' => 'Masukan password untuk konfirmasi'
+            ]
+        );
+
+        $user = User::find(Auth::id());
+        if (!$user) {
+            return redirect()->back()->with('error', 'User tidak ditemukan.');
+        }
+
+
+        if (!Hash::check($request->password, $user->password)) {
+            return redirect()->back()->withErrors(['password' => 'Password salah.']);
+        }
+
+        // hapus foto profil kalau ada
+        if ($user->profile_photo && Storage::disk('public')->exists($user->profile_photo)) {
+            Storage::disk('public')->delete($user->profile_photo);
+        }
+
+        // Delete user. Bisa pake destroy yang static (mengembalikan int)
+        $deleted = User::destroy($user->id);
     }
 }

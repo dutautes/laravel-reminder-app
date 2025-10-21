@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ReminderController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProfileController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -10,20 +11,31 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
 
 // logout
 Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+
     // reminder
     Route::prefix('/reminder')->name('reminder.')->group(function () {
         // index
         Route::get('/', [ReminderController::class, 'index'])->name('index');
         // create
-        Route::post('/store', [UserController::class, 'store'])->name('store');
+        // Route::post('/store', [UserController::class, 'store'])->name('store');
+    });
+
+    // profile
+    Route::prefix('/user')->name('user.')->group(function () {
+        // settings
+        Route::get('/user/settings', [UserController::class, 'settings'])->name('settings');
+        // update
+        Route::post('/user/settings', [UserController::class, 'updateProfile'])->name('update_profile');
+        // delete
+        Route::delete('/user/delete', [UserController::class, 'deleteAccount'])->name('delete_account');
     });
 });
 
