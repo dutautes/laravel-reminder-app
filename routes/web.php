@@ -2,15 +2,13 @@
 
 use App\Http\Controllers\ReminderController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\ProfileController;
-use App\Models\User;
+
 use Illuminate\Support\Facades\Route;
 
 // home
 Route::get('/', function () {
     return view('home');
 })->name('home');
-
 
 // logout
 Route::get('/logout', [UserController::class, 'logout'])->name('logout');
@@ -25,7 +23,7 @@ Route::middleware('auth')->group(function () {
         // index
         Route::get('/', [ReminderController::class, 'index'])->name('index');
         // create
-        // Route::post('/store', [UserController::class, 'store'])->name('store');
+        Route::post('/store', [ReminderController::class, 'store'])->name('store');
     });
 
     // profile

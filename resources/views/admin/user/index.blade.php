@@ -54,6 +54,7 @@
                 </tr>
             @endforeach
         </table>
+
         {{-- modal TAMBAH --}}
         <div class="modal fade" id="modalAdd" tabindex="-1" aria-labelledby="modalAddLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -68,23 +69,20 @@
                         <div class="modal-body">
                             <div class="mb-3">
                                 <label for="name" class="form-label">Nama:</label>
-                                <input type="text" name="name"
+                                <input type="text" name="name" id="name"
                                     class="form-control @error('name') is-invalid
-                                @enderror"
-                                    id="name">
+                                @enderror">
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email:</label>
                                 <input type="email" name="email" id="email"
                                     class="form-control @error('email') is-invalid
-
                                 @enderror">
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password:</label>
                                 <input type="password" name="password" id="password"
                                     class="form-control @error('password') is-invalid
-
                                 @enderror">
                             </div>
                         </div>

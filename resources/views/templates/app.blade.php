@@ -81,7 +81,7 @@
 
 <body>
     <!-- Navbar -->
-    <nav class="bg-white shadow-sm sticky top-0 z-[1000] py-3">
+    <nav class="bg-white shadow-sm sticky top-0 z-1000 py-3">
         <div class="container mx-auto flex justify-between items-center px-4">
             <!-- Brand -->
             <a href="#" class="flex items-center space-x-2">
@@ -176,7 +176,7 @@
     <!-- Navbar End -->
     @yield('content');
     {{-- Footer --}}
-    <footer class="bg-body-tertiary text-center text-lg-start" style="margin-top: 10rem">
+    <footer class="bg-body-tertiary text-center text-lg-start">
         <!-- Copyright -->
         <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
             © 2025 Copyright:
