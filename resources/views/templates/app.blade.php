@@ -8,14 +8,24 @@
     <title>RemindMe</title>
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+
     <!-- MDB -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/9.1.0/mdb.min.css" rel="stylesheet" />
+
     {{-- CDN jquery releases.jquery.com (minifed) --}}
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css">
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Bootstrap Icons (buat logo lonceng) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
     {{-- css --}}
     <style>
         :root {
@@ -71,125 +81,99 @@
 
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm py-3" style="background: #f8f9fa;">
-        <!-- Container wrapper -->
-        <div class="container d-flex justify-content-center align-items-center">
-            <!-- Navbar brand -->
-            <a class="navbar-brand d-flex align-items-center gap-2 me-5" href="#">
+    <nav class="bg-white shadow-sm sticky top-0 z-[1000] py-3">
+        <div class="container mx-auto flex justify-between items-center px-4">
+            <!-- Brand -->
+            <a href="#" class="flex items-center space-x-2">
                 <svg width="40" height="40" viewBox="0 0 316 316" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Abstract Check Shape - Laravel Style -->
-
                     <!-- Left Side -->
                     <path d="M 80 158 L 120 120 L 120 80 L 158 50 L 158 100 L 130 120 L 130 195 L 80 220 Z"
                         stroke="#2563eb" stroke-width="8" fill="none" stroke-linejoin="round" />
-
                     <!-- Middle -->
                     <path d="M 158 100 L 195 120 L 195 195 L 158 220 L 158 170 L 180 158 L 180 132 L 158 145 Z"
                         stroke="#2563eb" stroke-width="8" fill="none" stroke-linejoin="round" />
-
                     <!-- Right Side -->
                     <path
                         d="M 195 120 L 235 100 L 235 50 L 270 80 L 270 220 L 235 240 L 235 132 L 220 140 L 220 210 L 195 195 Z"
                         stroke="#2563eb" stroke-width="8" fill="none" stroke-linejoin="round" />
                 </svg>
-                <span>RemindMe</span>
+                <span class="font-semibold text-xl text-[#2563eb]">RemindMe</span>
             </a>
 
-            <!-- Toggle button -->
-            <button data-mdb-collapse-init class="navbar-toggler" type="button" data-mdb-target="#navbarButtonsExample"
-                aria-controls="navbarButtonsExample" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="fas fa-bars"></i>
-            </button>
-
-            <!-- Collapsible wrapper -->
-            <div class="collapse navbar-collapse" id="navbarButtonsExample">
-                <!-- Left links -->
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <!-- Links -->
+            <div class="hidden md:flex items-center space-x-6">
+                <ul class="flex space-x-5 items-center">
                     @if (Auth::check() && Auth::user()->role == 'admin')
-                        <li class="nav-item">
-                            <a class="nav-link fw-semibold {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
-                                href="{{ route('admin.dashboard') }}">Dashboard</a>
+                        <li><a href="{{ route('admin.dashboard') }}"
+                                class="font-medium hover:text-[#2563eb] {{ request()->routeIs('admin.dashboard') ? 'text-[#2563eb]' : 'text-gray-700' }}">Dashboard</a>
                         </li>
-                        <li class="nav-item">
-                            <a href="{{ route('admin.users.index') }}"
-                                class="nav-link fw-semibold {{ request()->routeIs('admin.users.index') ? 'active' : '' }}">Data
-                                User</a>
-                        </li>
+                        <li><a href="{{ route('admin.users.index') }}"
+                                class="font-medium hover:text-[#2563eb] {{ request()->routeIs('admin.users.index') ? 'text-[#2563eb]' : 'text-gray-700' }}">Data
+                                User</a></li>
                     @else
                         @if (Auth::check() && Auth::user()->role == 'user')
-                            <li class="nav-item">
-                                <a class="nav-link fw-semibold {{ request()->routeIs('dashboard') ? 'active' : '' }}"
-                                    href="{{ route('dashboard') }}">Dashboard</a>
+                            <li><a href="{{ route('dashboard') }}"
+                                    class="font-medium hover:text-[#2563eb] {{ request()->routeIs('dashboard') ? 'text-[#2563eb]' : 'text-gray-700' }}">Dashboard</a>
                             </li>
                         @else
-                            <li class="nav-item">
-                                <a class="nav-link fw-semibold custom-hover-underline {{ request()->routeIs('home') ? 'active' : '' }}"
-                                    href="{{ route('home') }}">Beranda</a>
+                            <li><a href="{{ route('home') }}"
+                                    class="font-medium hover:text-[#2563eb] {{ request()->routeIs('home') ? 'text-[#2563eb]' : 'text-gray-700' }}">Beranda</a>
                             </li>
                         @endif
-                        <li class="nav-item">
-                            <a href="#" class="nav-link fw-semibold custom-hover-underline">Projects</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('reminder.index') }}"
-                                class="nav-link fw-semibold custom-hover-underline {{ request()->routeIs('reminder.index') ? 'active' : '' }}">Reminder</a>
+                        <li><a href="#" class="font-medium hover:text-[#2563eb] text-gray-700">Projects</a></li>
+                        <li><a href="{{ route('reminder.index') }}"
+                                class="font-medium hover:text-[#2563eb] {{ request()->routeIs('reminder.index') ? 'text-[#2563eb]' : 'text-gray-700' }}">Reminder</a>
                         </li>
                     @endif
                 </ul>
-                <!-- Left links -->
-
-                <div class="d-flex align-items-center gap-2">
-                    @if (Auth::check())
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#"
-                                id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="{{ Auth::user()->profilePhotoUrl() }}" alt="Profile"
-                                    class="rounded-circle me-2" width="36" height="36"
-                                    style="object-fit: cover;">
-                            </a>
-
-                            <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="profileDropdown">
-                                <li class="px-3 py-2 text-center">
-                                    <img src="{{ Auth::user()->profilePhotoUrl() }}" class="rounded-circle mb-2"
-                                        width="60" height="60" style="object-fit: cover;">
-                                    <div class="fw-semibold">{{ Auth::user()->name }}</div>
-                                    @if (Auth::user()->username)
-                                        <small class="text-muted">{{ '@' . Auth::user()->username }}</small>
-                                    @endif
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li><a class="dropdown-item" href="{{ route('user.settings') }}">Profil Saya</a></li>
-                                <li><a class="dropdown-item" href="#">Pengaturan</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li>
-                                    <a href="{{ route('logout') }}" data-mdb-ripple-init type="button"
-                                        class="text-danger dropdown-item d-inline">
-                                        Logout
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    @else
-                        <a href="{{ route('login') }}" data-mdb-ripple-init type="button"
-                            class="btn btn-link px-3 me-2 fw-semibold text-primary">
-                            Login
-                        </a>
-                        <a href="{{ route('signup') }}" data-mdb-ripple-init type="button"
-                            class="btn btn-primary me-3 px-4 shadow-sm">
-                            Sign up
-                        </a>
-                    @endif
-                </div>
             </div>
-            <!-- Collapsible wrapper -->
+
+            <!-- Right side -->
+            <div class="flex items-center space-x-3">
+                @if (Auth::check())
+                    <!-- Profile Dropdown -->
+                    <!-- Profile Dropdown -->
+                    <div class="relative">
+                        <button id="profileDropdownBtn" class="flex items-center space-x-2 focus:outline-none">
+                            <img src="{{ Auth::user()->profilePhotoUrl() }}" alt="Profile"
+                                class="w-12 h-12 rounded-full object-cover border border-gray-300" />
+                            <!-- Arrow icon -->
+                            <svg id="dropdownArrow" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                class="w-4 h-4 text-gray-600 transition-transform duration-200">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+
+                        <div id="profileDropdownMenu"
+                            class="hidden absolute right-0 mt-3 w-52 px-1 bg-white rounded-lg shadow-lg border border-gray-100 transition-all duration-200">
+                            <div class="text-center py-3 border-b">
+                                <img src="{{ Auth::user()->profilePhotoUrl() }}"
+                                    class="w-14 h-14 rounded-full mx-auto object-cover mb-1">
+                                <div class="font-medium text-gray-800">{{ Auth::user()->name }}</div>
+                                @if (Auth::user()->username)
+                                    <small class="text-gray-500">{{ '@' . Auth::user()->username }}</small>
+                                @endif
+                            </div>
+                            <a href="{{ route('user.profile') }}"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil Saya</a>
+                            <a href="#"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Pengaturan</a>
+                            <hr>
+                            <a href="{{ route('logout') }}"
+                                class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Logout</a>
+                        </div>
+                    </div>
+                @else
+                    <a href="{{ route('login') }}" class="text-[#2563eb] font-medium hover:underline">Login</a>
+                    <a href="{{ route('signup') }}"
+                        class="bg-[#2563eb] hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg shadow-sm transition">Sign
+                        Up</a>
+                @endif
+            </div>
         </div>
-        <!-- Container wrapper -->
     </nav>
-    <!-- Navbar -->
+    <!-- Navbar End -->
     @yield('content');
     {{-- Footer --}}
     <footer class="bg-body-tertiary text-center text-lg-start" style="margin-top: 10rem">
@@ -212,6 +196,27 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
         integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous">
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const btn = document.getElementById("profileDropdownBtn");
+            const menu = document.getElementById("profileDropdownMenu");
+            const arrow = document.getElementById("dropdownArrow");
+
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                menu.classList.toggle("hidden");
+                arrow.classList.toggle("rotate-180"); // animasi panah naik turun
+            });
+
+            // Tutup dropdown kalau klik di luar
+            document.addEventListener("click", (e) => {
+                if (!menu.contains(e.target) && !btn.contains(e.target)) {
+                    menu.classList.add("hidden");
+                    arrow.classList.remove("rotate-180");
+                }
+            });
+        });
     </script>
 </body>
 

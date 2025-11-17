@@ -257,7 +257,7 @@ class UserController extends Controller
 
     public function updateProfile(Request $request)
     {
-        $user = User::find(Auth::id());
+        $user = User::find(Auth::id()); // ambil data user yang sedang login
         if (!$user) {
             return redirect()->back()->with('error', 'User tidak ditemukan.');
         }
@@ -270,6 +270,7 @@ class UserController extends Controller
                 'about' => 'nullable|string|max:1000',
                 'profile_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
                 'password' => 'nullable|confirmed|min:8',
+                'email' => 'nullable|email|max:255',
             ],
             [
                 'name.required' => 'Nama wajib diisi',
@@ -279,6 +280,8 @@ class UserController extends Controller
                 'profile_photo.max' => 'Ukuran gambar maksimal 2MB',
                 'password.min' => 'Password minimal 8 karakter',
                 'password.confirmed' => 'Konfirmasi password tidak cocok',
+                'email.email' => 'Email tidak valid',
+                'email.max' => 'Email maksimal 255 karakter',
             ]
         );
 
@@ -296,7 +299,8 @@ class UserController extends Controller
                 Storage::disk('public')->delete('profile_photo');
             }
 
-            $path = $request->file('profile_photo')->store('profile_photos', 'public');
+            $filename = 'user-' . Auth::id() . '.' . $request->file('profile_photo')->getClientOriginalExtension(); // nama file foto
+            $path = $request->file('profile_photo')->storeAs('profile_photos', $filename, 'public');
             $data['profile_photo'] = $path;
         }
 
@@ -305,7 +309,19 @@ class UserController extends Controller
             $data['password'] = Hash::make($request->password);
         }
 
-        // Update pake where->update (sesuai gaya "cek hasil")
+        // Handle email (jika diisi)
+        if ($request->filled('email')) {
+            if ($request->email === $user->email) {
+                return redirect()->back()->with('error', 'Email baru tidak berubah.');
+            } else {
+                $data['email'] = $request->email;
+            }
+        } else {
+            // kalau kosong, pertahankan email lama biar gak null
+            $data['email'] = $user->email;
+        }
+
+        // Update
         $updated = User::where('id', $user->id)->update($data);
 
         if ($updated) {
@@ -341,7 +357,26 @@ class UserController extends Controller
             Storage::disk('public')->delete($user->profile_photo);
         }
 
-        // Delete user. Bisa pake destroy yang static (mengembalikan int)
+        // Delete user
         $deleted = User::destroy($user->id);
+
+        if ($deleted) {
+            Auth::logout();
+            return redirect('/')->with('success', 'Akun berhasil dihapus.');
+        } else {
+            return redirect()->back()->with('error', 'Gagal menghapus akun, coba lagi.');
+        }
+    }
+
+    public function profile()
+    {
+        $user = Auth::user();
+        return view('user.profile', compact('user'));
+    }
+
+    public function account()
+    {
+        $user = Auth::user();
+        return view('user.account', compact('user'));
     }
 }

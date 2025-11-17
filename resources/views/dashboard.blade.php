@@ -1,5 +1,7 @@
 @extends('templates.app')
 
 @section('content')
-    <h1>Dashboard</h1>
+    <div class="container my-3">
+        <h3></h3>
+    </div>
 @endsection

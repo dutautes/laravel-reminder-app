@@ -31,11 +31,15 @@ Route::middleware('auth')->group(function () {
     // profile
     Route::prefix('/user')->name('user.')->group(function () {
         // settings
-        Route::get('/user/settings', [UserController::class, 'settings'])->name('settings');
+        Route::get('/settings', [UserController::class, 'settings'])->name('settings');
         // update
-        Route::post('/user/settings', [UserController::class, 'updateProfile'])->name('update_profile');
+        Route::post('/settings', [UserController::class, 'updateProfile'])->name('update_profile');
         // delete
-        Route::delete('/user/delete', [UserController::class, 'deleteAccount'])->name('delete_account');
+        Route::delete('/delete', [UserController::class, 'deleteAccount'])->name('delete_account');
+        // profile
+        Route::get('/profile', [UserController::class, 'profile'])->name('profile');
+        // account
+        Route::get('/account', [UserController::class, 'account'])->name('account');
     });
 });
 

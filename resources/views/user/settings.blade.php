@@ -4,8 +4,11 @@
     <div class="container">
         <h2 class="mb-4">Pengaturan Profil</h2>
 
-        @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
+        @if (Session::get('failed'))
+            <div class="alert alert-success alert-dismissible fade show alert-top-right" role="alert">
+                {{ Session::get('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
         @endif
 
         <form action="{{ route('user.update_profile') }}" method="POST" enctype="multipart/form-data">
