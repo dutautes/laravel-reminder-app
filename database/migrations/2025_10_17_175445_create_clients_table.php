@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('alamat');
-            $table->enum('status', ['active', 'inactive', 'pending']);
+            $table->enum('', ['active', 'inactive', 'pending']);
             $table->timestamps();
             $table->softDeletes();
         });

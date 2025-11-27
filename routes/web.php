@@ -24,6 +24,14 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [ReminderController::class, 'index'])->name('index');
         // create
         Route::post('/store', [ReminderController::class, 'store'])->name('store');
+        // show
+        Route::get('/{id}', [ReminderController::class, 'show'])->name('show');
+        // edit
+        Route::get('/edit/{id}', [ReminderController::class, 'edit'])->name('edit');
+        // update
+        Route::put('/update/{id}', [ReminderController::class, 'update'])->name('update');
+        // delete
+        Route::delete('/destroy/{id}', [ReminderController::class, 'destroy'])->name('destroy');
     });
 
     // profile

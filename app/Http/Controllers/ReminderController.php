@@ -61,32 +61,62 @@ class ReminderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Reminder $reminder)
+    public function show($id)
     {
-        //
+        $reminder = Reminder::find($id);
+        return view('reminder.detail', compact('reminder'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Reminder $reminder)
+    public function edit($id)
     {
-        //
+        $reminder = Reminder::find($id);
+        return view('reminder.edit', compact('reminder'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Reminder $reminder)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'title' => 'required|min:3',
+            'description' => 'required',
+            'due_at' => 'required',
+            'repeat' => 'required'
+        ], [
+            'title.required' => 'Judul wajib diisi!',
+            'title.min' => 'Judul minimal 3 huruf!',
+            'description.required' => 'Deskripsi wajib diisi!',
+            'due_at' => 'Tanggal dan Waktu wajib diisi!',
+            'repeat' => 'Repeat wajib dipilih'
+        ]);
+
+        $updateData = Reminder::where('id', $id)->update([
+            'user_id' => Auth::id(),
+            'title' => $request->title,
+            'description' => $request->description,
+            'due_at' => $request->due_at,
+            'repeat' => $request->repeat
+        ]);
+
+        if ($updateData) {
+            return redirect()->route('reminder.index')->with('success', 'Data pengguna berhasil di edit');
+        } else {
+            return redirect()->back()->with('error', 'Gagal menambahkan data pengguna');
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Reminder $reminder)
+    public function destroy($id)
     {
-        //
+        $reminder = Reminder::findOrFail($id);
+        $reminder->delete();
+
+        return redirect()->route('reminder.index')->with('success', 'Reminder deleted.');
     }
 }

@@ -9,26 +9,55 @@
             <a href="" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAdd">Tambah Data</a>
         </div>
 
-        <h3 class="mb-2">Active (0)</h3>
+        <h3 class="mb-2">Active ({{ count($reminders) }})</h3>
         <div class="row">
             @foreach ($reminders as $reminder)
                 <div class="col-md-12">
-                    <div class="card mb-3 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="text-xl">{{ $reminder->title }}</h5>
-                            <p class="text-base">{{ $reminder->description }}</p>
-                            <div class="d-flex justify-between">
-                                <div class="d-flex justify-content-center align-items-center gap-3">
-                                    <span><i
-                                            class="fa-regular fa-calendar me-1"></i>{{ \Carbon\Carbon::parse($reminder->due_at)->format('M j, Y') }}</span>
-                                    <span><i
-                                            class="fa-regular fa-clock me-1"></i>{{ \Carbon\Carbon::parse($reminder->due_at)->format('h.i A') }}</span>
-                                    <span><i class="fa-solid fa-repeat me-1"></i>{{ $reminder->repeat }}</span>
+                    <a href="{{ route('reminder.show', $reminder->id) }}" class="text-decoration-none text-dark">
+                        <div class="card mb-3 reminder-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-between">
+                                    <h5 class="card-title text-xl">{{ $reminder->title }}</h5>
+                                    <div class="d-flex gap-3">
+                                        <a href="{{ route('reminder.edit', $reminder->id) }}"><i
+                                                class="fa-regular fa-pen-to-square editBtn" style="cursor: pointer"></i></a>
+                                        <form action="{{ route('reminder.destroy', $reminder->id) }}" method="POST"
+                                            onsubmit="return confirm('Delete this reminder?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit">
+                                                <i class="fa-regular fa-trash-can deleteBtn"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
-                                <span>Done <input type="checkbox" name="done" id="done"></span>
+                                <p class="text-base">{{ $reminder->description }}</p>
+                                <div class="d-flex justify-between">
+                                    <div class="d-flex justify-content-center align-items-center gap-3">
+                                        <span><i
+                                                class="fa-regular fa-calendar me-1"></i>{{ \Carbon\Carbon::parse($reminder->due_at)->format('M j, Y') }}</span>
+                                        <span><i
+                                                class="fa-regular fa-clock me-1"></i>{{ \Carbon\Carbon::parse($reminder->due_at)->format('h.i A') }}</span>
+                                        <span><i class="fa-solid fa-repeat me-1"></i>{{ $reminder->repeat }}</span>
+                                    </div>
+
+                                    {{-- toggle switch --}}
+                                    <div class="d-flex gap-3">
+                                        <span>Done</span>
+                                        <form action="{{-- route('reminder.toggle', $reminder->id) --}}" method="POST">
+                                            @csrf
+                                            <label class="switch">
+                                                <input type="checkbox" {{-- onchange="this.form.submit()" --}}
+                                                    {{ $reminder->status === 'done' ? 'checked' : '' }}>
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </form>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             @endforeach
         </div>
@@ -54,9 +83,10 @@
                             </div>
                             <div class="mb-3">
                                 <label for="description" class="form-label">Description:</label>
-                                <input type="text" name="description" id="description"
+                                <textarea type="text" name="description" cols="10" rows="10" id="description"
                                     class="form-control @error('description') is-invalid
-                                @enderror">
+                                @enderror"
+                                    style="field-sizing: content;"></textarea>
                             </div>
                             <div class="mb-3">
                                 <label for="due_at" class="form-label">Tanggal & Waktu:</label>
@@ -82,6 +112,71 @@
                 </div>
             </div>
         </div>
-        {{-- end of modal --}}
+        {{-- end of modal add --}}
     </div>
 @endsection
+
+@push('style')
+    <style>
+        .reminder-card {
+            box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+            transition: all 0.3s;
+        }
+
+        .reminder-card:hover {
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        }
+
+        .editBtn:hover {
+            color: skyblue;
+        }
+
+        .deleteBtn:hover {
+            color: red;
+        }
+
+        /* toggle */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 45px;
+            height: 24px;
+        }
+
+        .switch input {
+            display: none;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .3s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: #4ade80;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(21px);
+        }
+    </style>
+@endpush

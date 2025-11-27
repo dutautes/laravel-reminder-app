@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('description');
             $table->datetime('due_at');
             $table->enum('repeat', ['none', 'daily', 'weekly', 'monthly']);
-            $table->enum('status', ['done', 'pending', 'missed']);
+            $table->enum('status', ['done', 'pending', 'missed']); // status diubah jadi boolean
             $table->timestamps();
             $table->softDeletes();
         });
