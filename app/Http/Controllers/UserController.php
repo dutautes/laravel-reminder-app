@@ -378,9 +378,9 @@ class UserController extends Controller
     // chartbar di admin
     public function chartData()
     {
-        $chartData = User::withCount('reminders')->get();
+        $chartData = User::withCount('reminders')->get(); // menghitung jumlah reminder yang dimiliki oleh masing masing user
 
-        $labels = $chartData->pluck('name');
+        $labels = $chartData->pluck('name'); // pluck() : ambil seluruh data dari field yang dituju
         $data = $chartData->pluck('reminders_count');
 
         return response()->json([

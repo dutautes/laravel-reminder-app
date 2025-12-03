@@ -124,10 +124,10 @@
                                     class="font-medium hover:text-[#2563eb] {{ request()->routeIs('home') ? 'text-[#2563eb]' : 'text-gray-700' }}">Beranda</a>
                             </li>
                         @endif
-                        <li><a href="#" class="font-medium hover:text-[#2563eb] text-gray-700">Projects</a></li>
                         <li><a href="{{ route('reminder.index') }}"
                                 class="font-medium hover:text-[#2563eb] {{ request()->routeIs('reminder.index') ? 'text-[#2563eb]' : 'text-gray-700' }}">Reminder</a>
                         </li>
+                        <li><a href="#" class="font-medium hover:text-[#2563eb] text-gray-700">Projects</a></li>
                     @endif
                 </ul>
             </div>
@@ -179,14 +179,27 @@
     <!-- Navbar End -->
     @yield('content')
     {{-- Footer --}}
-    <footer class="bg-body-tertiary text-center text-lg-start">
-        <!-- Copyright -->
-        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
-            © 2025 Copyright:
-            <a class="text-body" href="#">dutasuksesif@gmail.com</a>
+    <footer class="bg-gray-100 mt-10 border-t">
+        <div class="container mx-auto w-75 py-8 px-4 flex flex-col md:flex-row justify-between items-center">
+
+            <!-- Brand -->
+            <div class="flex items-center space-x-2 mb-4 md:mb-0">
+                <span class="text-xl font-semibold text-[#2563eb]">RemindMe</span>
+            </div>
+
+            <!-- Links -->
+            <div class="flex space-x-6 text-gray-600 text-sm">
+                <a href="#" class="hover:text-[#2563eb] transition">Tentang</a>
+                <a href="#" class="hover:text-[#2563eb] transition">Kebijakan</a>
+                <a href="#" class="hover:text-[#2563eb] transition">Kontak</a>
+            </div>
         </div>
-        <!-- Copyright -->
+
+        <div class="text-center py-4 bg-gray-200 text-sm text-gray-600">
+            © 2025 RemindMe — Dibuat dengan 💙 oleh <span class="font-medium">Duta Suk Suk</span>
+        </div>
     </footer>
+
 
     @stack('script')
     {{-- datatable CDN (cdn.datatables.net) --}}

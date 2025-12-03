@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Reminder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf; // export pdf
+use Carbon\Carbon;
 
 class ReminderController extends Controller
 {
@@ -144,6 +146,31 @@ class ReminderController extends Controller
 
     public function exportDashboardPdf()
     {
-        //
+        $user = Auth::user();
+
+        // ambil semua reminder punya user
+        $reminders = $user->reminders()->orderBy('created_at', 'desc')->get();
+
+        // hitung2
+        $total = $reminders->count();
+        $done = $reminders->where('status', 1)->count();
+        $pending = $reminders->where('status', 0)->count();
+
+        $percentage = $total > 0 ? round(($done / $total) * 100, 1) : 0;
+
+        // ambil 5 terbaru
+        $latest = $reminders->take(5);
+
+        $pdf = Pdf::loadView('pdf.dashboard-report', [
+            'user' => $user,
+            'total' => $total,
+            'done' => $done,
+            'pending' => $pending,
+            'percentage' => $percentage,
+            'latest' => $latest,
+            'date' => Carbon::now(),
+        ]);
+
+        return $pdf->download('dashboard-report.pdf');
     }
 }

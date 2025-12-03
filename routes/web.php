@@ -33,8 +33,7 @@ Route::middleware('auth')->group(function () {
         // toggle reminder
         Route::put('/{id}/toggle', [ReminderController::class, 'toggle'])->name('toggle');
         // export pdf
-        Route::get('/report/pdf', [ReminderController::class, 'exportDashboardPdf'])
-            ->name('report.pdf');
+        Route::get('/report/pdf', [ReminderController::class, 'exportDashboardPdf'])->name('report.pdf');
     });
 
     // profile
