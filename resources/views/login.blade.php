@@ -57,10 +57,6 @@
                 <button type="submit"
                     class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">Login</button>
 
-                <div class="text-center mt-3">
-                    <a href="#" class="text-sm text-blue-600 hover:underline">Forgot password?</a>
-                </div>
-
                 <div class="text-center mt-2">
                     <p class="text-sm text-gray-500">Belum punya akun?
                         <a href="{{ route('signup') }}" class="text-blue-600 font-medium hover:underline">Register!</a>

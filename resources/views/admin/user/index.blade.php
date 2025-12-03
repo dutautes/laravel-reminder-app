@@ -20,7 +20,7 @@
         </div>
 
         <h3>Data Pengguna</h3>
-        <table class="table table-bordered" id="usersTable">
+        <table class="table table-bordered table-info" id="usersTable">
             <tr>
                 <th>#</th>
                 <th>Nama</th>

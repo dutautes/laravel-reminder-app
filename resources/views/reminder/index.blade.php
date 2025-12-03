@@ -1,62 +1,119 @@
 @extends('templates.app')
 
 @section('content')
-    <div class="container my-3">
+    <div class="container w-75 my-3">
         <h3 class="text-3xl"><b>My Reminders</b></h3>
         <h3 class="text-xl mt-3">Manage and organize your tasks efficiently</h3>
 
         <div class="d-flex justify-content-end mb-3 mt-4">
-            <a href="" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAdd">Tambah Data</a>
+            <a href="" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAdd">tambah</a>
         </div>
 
-        <h3 class="mb-2">Active ({{ count($reminders) }})</h3>
+        <h3 class="my-3 text-black">Active ({{ count($active) }})</h3>
         <div class="row">
-            @foreach ($reminders as $reminder)
+            @foreach ($active as $reminder)
                 <div class="col-md-12">
-                    <a href="{{ route('reminder.show', $reminder->id) }}" class="text-decoration-none text-dark">
-                        <div class="card mb-3 reminder-card">
-                            <div class="card-body">
-                                <div class="d-flex justify-between">
-                                    <h5 class="card-title text-xl">{{ $reminder->title }}</h5>
-                                    <div class="d-flex gap-3">
-                                        <a href="{{ route('reminder.edit', $reminder->id) }}"><i
-                                                class="fa-regular fa-pen-to-square editBtn" style="cursor: pointer"></i></a>
-                                        <form action="{{ route('reminder.destroy', $reminder->id) }}" method="POST"
-                                            onsubmit="return confirm('Delete this reminder?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit">
-                                                <i class="fa-regular fa-trash-can deleteBtn"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                                <p class="text-base">{{ $reminder->description }}</p>
-                                <div class="d-flex justify-between">
-                                    <div class="d-flex justify-content-center align-items-center gap-3">
-                                        <span><i
-                                                class="fa-regular fa-calendar me-1"></i>{{ \Carbon\Carbon::parse($reminder->due_at)->format('M j, Y') }}</span>
-                                        <span><i
-                                                class="fa-regular fa-clock me-1"></i>{{ \Carbon\Carbon::parse($reminder->due_at)->format('h.i A') }}</span>
-                                        <span><i class="fa-solid fa-repeat me-1"></i>{{ $reminder->repeat }}</span>
-                                    </div>
-
-                                    {{-- toggle switch --}}
-                                    <div class="d-flex gap-3">
-                                        <span>Done</span>
-                                        <form action="{{-- route('reminder.toggle', $reminder->id) --}}" method="POST">
-                                            @csrf
-                                            <label class="switch">
-                                                <input type="checkbox" {{-- onchange="this.form.submit()" --}}
-                                                    {{ $reminder->status === 'done' ? 'checked' : '' }}>
-                                                <span class="slider round"></span>
-                                            </label>
-                                        </form>
-                                    </div>
-
+                    <div class="card mb-3 reminder-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-between">
+                                <a href="{{ route('reminder.show', $reminder->id) }}">
+                                    <h5 class="card-title text-xl text-black">{{ $reminder->title }}</h5>
+                                </a>
+                                <div class="d-flex gap-3">
+                                    <a href="{{ route('reminder.edit', $reminder->id) }}"><i
+                                            class="fa-regular fa-pen-to-square editBtn" style="cursor: pointer"></i></a>
+                                    <form action="{{ route('reminder.destroy', $reminder->id) }}" method="POST"
+                                        onsubmit="return confirm('Delete this reminder?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit">
+                                            <i class="fa-regular fa-trash-can deleteBtn"></i>
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
+                            <p class="text-base">{{ $reminder->description }}</p>
+                            <div class="d-flex justify-between">
+                                <div class="d-flex justify-content-center align-items-center gap-3">
+                                    <span><i
+                                            class="fa-regular fa-calendar me-1"></i>{{ \Carbon\Carbon::parse($reminder->due_at)->format('M j, Y') }}</span>
+                                    <span><i
+                                            class="fa-regular fa-clock me-1"></i>{{ \Carbon\Carbon::parse($reminder->due_at)->format('h.i A') }}</span>
+                                    <span><i class="fa-solid fa-repeat me-1"></i>{{ $reminder->repeat }}</span>
+                                </div>
+
+                                {{-- toggle switch --}}
+                                <div class="d-flex gap-3">
+                                    <span>Done</span>
+                                    <form action="{{ route('reminder.toggle', $reminder->id) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <label class="switch">
+                                            <input type="checkbox" onchange="this.form.submit()"
+                                                {{ $reminder->status ? 'checked' : '' }}>
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </form>
+                                </div>
+
+                            </div>
                         </div>
+                    </div>
+                    </a>
+                </div>
+            @endforeach
+        </div>
+
+        <h3 class="my-3 text-black">Completed ({{ count($completed) }})</h3>
+        <div class="row">
+            @foreach ($completed as $reminder)
+                <div class="col-md-12">
+                    <div class="card mb-3 reminder-card-completed">
+                        <div class="card-body">
+                            <div class="d-flex justify-between">
+                                <a href="{{ route('reminder.show', $reminder->id) }}">
+                                    <h5 class="card-title text-xl"><del>{{ $reminder->title }}</del></h5>
+                                </a>
+                                <div class="d-flex gap-3">
+                                    <a href="{{ route('reminder.edit', $reminder->id) }}"><i
+                                            class="fa-regular fa-pen-to-square editBtn" style="cursor: pointer"></i></a>
+                                    <form action="{{ route('reminder.destroy', $reminder->id) }}" method="POST"
+                                        onsubmit="return confirm('Delete this reminder?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit">
+                                            <i class="fa-regular fa-trash-can deleteBtn"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            <p class="text-base">{{ $reminder->description }}</p>
+                            <div class="d-flex justify-between">
+                                <div class="d-flex justify-content-center align-items-center gap-3">
+                                    <span><i
+                                            class="fa-regular fa-calendar me-1"></i>{{ \Carbon\Carbon::parse($reminder->due_at)->format('M j, Y') }}</span>
+                                    <span><i
+                                            class="fa-regular fa-clock me-1"></i>{{ \Carbon\Carbon::parse($reminder->due_at)->format('h.i A') }}</span>
+                                    <span><i class="fa-solid fa-repeat me-1"></i>{{ $reminder->repeat }}</span>
+                                </div>
+
+                                {{-- toggle switch --}}
+                                <div class="d-flex gap-3">
+                                    <span>Done</span>
+                                    <form action="{{ route('reminder.toggle', $reminder->id) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <label class="switch">
+                                            <input type="checkbox" onchange="this.form.submit()"
+                                                {{ $reminder->status ? 'checked' : '' }}>
+                                            <span class="slider round"></span>
+                                        </label>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
                     </a>
                 </div>
             @endforeach
@@ -172,7 +229,7 @@
         }
 
         input:checked+.slider {
-            background-color: #4ade80;
+            background-color: #535755dc;
         }
 
         input:checked+.slider:before {

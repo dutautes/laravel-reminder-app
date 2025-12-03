@@ -206,7 +206,6 @@ class UserController extends Controller
             } else {
                 return redirect()->route('dashboard')->with('success', 'Berhasil login!');
             }
-            return redirect()->route('dashboard')->with('success', 'Berhasil login!');
         } else {
             return redirect()->back()->with('error', 'Gagal login! pastikan data sudah sesuai');
         }
@@ -226,15 +225,11 @@ class UserController extends Controller
 
     public function datatables()
     {
-        $users = User::query();
+        $users = User::where('role', 'user');
         return DataTables::of($users)
             ->addIndexColumn()
             ->addColumn('role_badge', function ($user) {
-                if ($user['role'] == 'admin') {
-                    return '<span class="badge bg-primary">' . $user['role'] . '</span>';
-                } else {
-                    return '<span class="badge bg-secondary">' . $user['role'] . '</span>';
-                }
+                return '<span class="badge bg-secondary">' . $user['role'] . '</span>';
             })
             ->addColumn('action', function ($user) {
                 $btnEdit = '<a href="' . route('admin.users.edit', $user->id) . '" class="btn btn-primary">Edit</a>';
@@ -378,5 +373,19 @@ class UserController extends Controller
     {
         $user = Auth::user();
         return view('user.account', compact('user'));
+    }
+
+    // chartbar di admin
+    public function chartData()
+    {
+        $chartData = User::withCount('reminders')->get();
+
+        $labels = $chartData->pluck('name');
+        $data = $chartData->pluck('reminders_count');
+
+        return response()->json([
+            'labels' => $labels,
+            'data' => $data,
+        ]);
     }
 }

@@ -1,7 +1,7 @@
 @extends('templates.app')
 
 @section('content')
-    <div>
+    <div class="container w-75">
         <section class="hero-section">
             <div class="container">
                 <div class="row align-items-center">
@@ -12,7 +12,7 @@
                             Manage your tasks, collaborate with your team, and never miss a deadline. ReminderApp helps you
                             stay on top of everything that matters.
                         </p>
-                        <div class="d-flex flex-wrap">
+                        <div class="d-flex flex-wrap mb-3">
                             <a href="{{ route('signup') }}" class="btn-get-started">
                                 Get Started
                                 <i class="bi bi-arrow-right"></i>

@@ -13,8 +13,9 @@ class ReminderController extends Controller
      */
     public function index()
     {
-        $reminders = Reminder::all();
-        return view('reminder.index', compact('reminders'));
+        $active = Reminder::where('user_id', Auth::id())->where('status', 0)->get();
+        $completed = Reminder::where('user_id', Auth::id())->where('status', 1)->get();
+        return view('reminder.index', compact('active', 'completed'));
     }
 
     /**
@@ -48,7 +49,8 @@ class ReminderController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'due_at' => $request->due_at,
-            'repeat' => $request->repeat
+            'repeat' => $request->repeat,
+            'status' => 0,
         ]);
 
         if ($createData) {
@@ -118,5 +120,30 @@ class ReminderController extends Controller
         $reminder->delete();
 
         return redirect()->route('reminder.index')->with('success', 'Reminder deleted.');
+    }
+
+    // toggle reminder
+    public function toggle($id)
+    {
+        $reminder = Reminder::findOrFail($id);
+
+        // toggle
+        $reminder->status = !$reminder->status;
+        $reminder->save();
+
+        return back();
+    }
+
+    // dashboard
+    public function dashboardPage()
+    {
+        $activeCount = Reminder::where('user_id', Auth::id())->where('status', 0)->count();
+        $completedCount = Reminder::where('user_id', Auth::id())->where('status', 1)->count();
+        return view('dashboard', compact('activeCount', 'completedCount'));
+    }
+
+    public function exportDashboardPdf()
+    {
+        //
     }
 }

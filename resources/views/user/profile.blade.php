@@ -61,7 +61,7 @@
                                 <textarea name="about" class="form-control" rows="4" placeholder="Tulis cerita singkat tentang diri Anda.">{{ old('about', $user->about) }}</textarea>
                             </div>
 
-                            <button type="submit" class="btn btn-primary px-4">Simpan Perubahan</button>
+                            <button type="submit" class="btn btn-primary px-4">Simpan</button>
                         </form>
                     </div>
                 </div>

@@ -14,9 +14,7 @@ Route::get('/', function () {
 Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [ReminderController::class, 'dashboardPage'])->name('dashboard');
 
     // reminder
     Route::prefix('/reminder')->name('reminder.')->group(function () {
@@ -32,6 +30,11 @@ Route::middleware('auth')->group(function () {
         Route::put('/update/{id}', [ReminderController::class, 'update'])->name('update');
         // delete
         Route::delete('/destroy/{id}', [ReminderController::class, 'destroy'])->name('destroy');
+        // toggle reminder
+        Route::put('/{id}/toggle', [ReminderController::class, 'toggle'])->name('toggle');
+        // export pdf
+        Route::get('/report/pdf', [ReminderController::class, 'exportDashboardPdf'])
+            ->name('report.pdf');
     });
 
     // profile
@@ -51,6 +54,8 @@ Route::middleware('auth')->group(function () {
 
 // isAdmin
 Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function () {
+    Route::get('/reminders/chart', [UserController::class, 'chartData'])->name('reminders.chart');
+
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('dashboard');

@@ -36,7 +36,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
             color: var(--dark-gray);
         }
 
@@ -75,14 +75,18 @@
         .nav-link.active {
             color: var(--primary-blue) !important;
         }
+
+        .z-9999 {
+            z-index: 9999 !important;
+        }
     </style>
     @stack('style')
 </head>
 
 <body>
     <!-- Navbar -->
-    <nav class="bg-white shadow-sm sticky top-0 z-1000 py-3">
-        <div class="container mx-auto flex justify-between items-center px-4">
+    <nav class="bg-white shadow-sm sticky top-0 z-50 py-3">
+        <div class="container w-75 mx-auto flex justify-between items-center px-4">
             <!-- Brand -->
             <a href="#" class="flex items-center space-x-2">
                 <svg width="40" height="40" viewBox="0 0 316 316" xmlns="http://www.w3.org/2000/svg">
@@ -112,7 +116,7 @@
                                 User</a></li>
                     @else
                         @if (Auth::check() && Auth::user()->role == 'user')
-                            <li><a href="{{ route('dashboard') }}"
+                            <li><a href="{{ route('dashboard') }}"r
                                     class="font-medium hover:text-[#2563eb] {{ request()->routeIs('dashboard') ? 'text-[#2563eb]' : 'text-gray-700' }}">Dashboard</a>
                             </li>
                         @else
@@ -132,7 +136,6 @@
             <div class="flex items-center space-x-3">
                 @if (Auth::check())
                     <!-- Profile Dropdown -->
-                    <!-- Profile Dropdown -->
                     <div class="relative">
                         <button id="profileDropdownBtn" class="flex items-center space-x-2 focus:outline-none">
                             <img src="{{ Auth::user()->profilePhotoUrl() }}" alt="Profile"
@@ -146,7 +149,7 @@
                         </button>
 
                         <div id="profileDropdownMenu"
-                            class="hidden absolute right-0 mt-3 w-52 px-1 bg-white rounded-lg shadow-lg border border-gray-100 transition-all duration-200">
+                            class="hidden z-9999 absolute right-0 mt-3 w-52 px-1 bg-white rounded-lg shadow-lg border border-gray-100 transition-all duration-200">
                             <div class="text-center py-3 border-b">
                                 <img src="{{ Auth::user()->profilePhotoUrl() }}"
                                     class="w-14 h-14 rounded-full mx-auto object-cover mb-1">
@@ -174,7 +177,7 @@
         </div>
     </nav>
     <!-- Navbar End -->
-    @yield('content');
+    @yield('content')
     {{-- Footer --}}
     <footer class="bg-body-tertiary text-center text-lg-start">
         <!-- Copyright -->
@@ -197,6 +200,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
         integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous">
     </script>
+    {{-- CDN ChartJS --}}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const btn = document.getElementById("profileDropdownBtn");
