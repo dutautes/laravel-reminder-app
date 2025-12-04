@@ -2,6 +2,13 @@
 
 @section('content')
     <div class="container w-75 my-3">
+        @if (Session::get('success'))
+            <div class="alert alert-success">{{ Session::get('success') }}</div>
+        @endif
+        @if (Session::get('error'))
+            <div class="alert alert-danger">{{ Session::get('error') }}</div>
+        @endif
+
         <h3 class="text-3xl"><b>My Reminders</b></h3>
         <h3 class="text-xl mt-3">Manage and organize your tasks efficiently</h3>
 
@@ -136,20 +143,30 @@
                                 <input type="text" name="title"
                                     class="form-control @error('title') is-invalid
                                 @enderror"
-                                    id="title">
+                                    id="title" value="{{ old('title') }}">
+                                @error('title')
+                                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="mb-3">
                                 <label for="description" class="form-label">Description:</label>
                                 <textarea type="text" name="description" cols="10" rows="10" id="description"
                                     class="form-control @error('description') is-invalid
                                 @enderror"
-                                    style="field-sizing: content;"></textarea>
+                                    style="field-sizing: content;" value="{{ old('description') }}"></textarea>
+                                @error('description')
+                                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="mb-3">
                                 <label for="due_at" class="form-label">Tanggal & Waktu:</label>
                                 <input type="datetime-local" name="due_at" id="due_at"
                                     class="form-control @error('due_at') is-invalid
-                                @enderror">
+                                @enderror"
+                                    value="{{ old('due_at') }}">
+                                @error('due_at')
+                                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="mb-3">
                                 <label for="repeat" class="form-label">Repeat</label>

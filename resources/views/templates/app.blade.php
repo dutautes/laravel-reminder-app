@@ -114,6 +114,9 @@
                         <li><a href="{{ route('admin.users.index') }}"
                                 class="font-medium hover:text-[#2563eb] {{ request()->routeIs('admin.users.index') ? 'text-[#2563eb]' : 'text-gray-700' }}">Data
                                 User</a></li>
+                        <li><a href="{{ route('admin.activities.index') }}"
+                                class="font-medium hover:text-[#2563eb] {{ request()->routeIs('admin.activities.index') ? 'text-[#2563eb]' : 'text-gray-700' }}">Activity</a>
+                        </li>
                     @else
                         @if (Auth::check() && Auth::user()->role == 'user')
                             <li><a href="{{ route('dashboard') }}"r
@@ -184,6 +187,18 @@
 
             <!-- Brand -->
             <div class="flex items-center space-x-2 mb-4 md:mb-0">
+                <svg width="40" height="40" viewBox="0 0 316 316" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Left Side -->
+                    <path d="M 80 158 L 120 120 L 120 80 L 158 50 L 158 100 L 130 120 L 130 195 L 80 220 Z"
+                        stroke="#2563eb" stroke-width="8" fill="none" stroke-linejoin="round" />
+                    <!-- Middle -->
+                    <path d="M 158 100 L 195 120 L 195 195 L 158 220 L 158 170 L 180 158 L 180 132 L 158 145 Z"
+                        stroke="#2563eb" stroke-width="8" fill="none" stroke-linejoin="round" />
+                    <!-- Right Side -->
+                    <path
+                        d="M 195 120 L 235 100 L 235 50 L 270 80 L 270 220 L 235 240 L 235 132 L 220 140 L 220 210 L 195 195 Z"
+                        stroke="#2563eb" stroke-width="8" fill="none" stroke-linejoin="round" />
+                </svg>
                 <span class="text-xl font-semibold text-[#2563eb]">RemindMe</span>
             </div>
 

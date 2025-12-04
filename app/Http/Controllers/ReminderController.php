@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reminder;
+use App\Models\UserActivity; // model ua
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf; // export pdf
@@ -55,6 +56,15 @@ class ReminderController extends Controller
             'status' => 0,
         ]);
 
+        // log activity
+        $log = new UserActivity();
+        $log->saveActivity(
+            'create_reminder',
+            'Membuat reminder baru',
+            'Reminder',
+            $createData->id
+        );
+
         if ($createData) {
             return redirect()->route('reminder.index')->with('success', 'Data pengguna berhasil ditambahkan');
         } else {
@@ -106,6 +116,15 @@ class ReminderController extends Controller
             'repeat' => $request->repeat
         ]);
 
+        // log activity
+        // $log = new UserActivity();
+        // $log->saveActivity(
+        //     'update_reminder',
+        //     'Mengubah reminder',
+        //     'Reminder',
+        //     $updateData->id
+        // );
+
         if ($updateData) {
             return redirect()->route('reminder.index')->with('success', 'Data pengguna berhasil di edit');
         } else {
@@ -121,6 +140,15 @@ class ReminderController extends Controller
         $reminder = Reminder::findOrFail($id);
         $reminder->delete();
 
+        // log activity
+        $log = new UserActivity();
+        $log->saveActivity(
+            'delete_reminder',
+            'Menghapus reminder',
+            'Reminder',
+            $reminder->id
+        );
+
         return redirect()->route('reminder.index')->with('success', 'Reminder deleted.');
     }
 
@@ -129,12 +157,35 @@ class ReminderController extends Controller
     {
         $reminder = Reminder::findOrFail($id);
 
-        // toggle
+        // simpan status lama (biar tau berubah ke apa)
+        $oldStatus = $reminder->status;
+
+        // toggle status
         $reminder->status = !$reminder->status;
         $reminder->save();
 
+        // tentuin aksi nya
+        $action = $reminder->status
+            ? 'complete_reminder'
+            : 'uncomplete_reminder';
+
+        // deskripsi
+        $description = $reminder->status
+            ? 'Menandai reminder sebagai selesai'
+            : 'Membatalkan status selesai reminder';
+
+        // log activity
+        $log = new UserActivity();
+        $log->saveActivity(
+            $action,
+            $description,
+            'Reminder',
+            $reminder->id
+        );
+
         return back();
     }
+
 
     // dashboard
     public function dashboardPage()
@@ -171,6 +222,8 @@ class ReminderController extends Controller
             'date' => Carbon::now(),
         ]);
 
-        return $pdf->download('dashboard-report.pdf');
+        $pemilik = $user->name;
+
+        return $pdf->download('dashboard-report' . $pemilik . '.pdf');
     }
 }

@@ -10,18 +10,33 @@
 
             <div class="mb-3">
                 <label>Title</label>
-                <input type="text" name="title" value="{{ $reminder->title }}" class="form-control">
+                <input type="text" name="title" value="{{ $reminder->title }}"
+                    class="form-control @error('title') is-invalid
+                        @enderror">
+                @error('title')
+                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <label>Description</label>
-                <textarea name="description" class="form-control">{{ $reminder->description }}</textarea>
+                <textarea name="description"
+                    class="form-control @error('description') is-invalid
+                                @enderror">{{ $reminder->description }}</textarea>
+                @error('description')
+                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="mb-3">
                 <label>Tanggal & Waktu</label>
-                <input type="datetime-local" name="due_at" class="form-control"
+                <input type="datetime-local" name="due_at"
+                    class="form-control @error('due_at') is-invalid
+                                @enderror"
                     value="{{ \Carbon\Carbon::parse($reminder->due_at)->format('Y-m-d\TH:i') }}">
+                @error('due_at')
+                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="mb-3">

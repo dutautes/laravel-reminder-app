@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ReminderController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserActivityController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -58,6 +59,9 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function (
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('dashboard');
+
+    // activities
+    Route::get('/activities', [UserActivityController::class, 'index'])->name('activities.index');
 
     // data user
     Route::prefix('/users')->name('users.')->group(function () {

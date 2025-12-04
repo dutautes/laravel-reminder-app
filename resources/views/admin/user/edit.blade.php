@@ -3,9 +3,9 @@
 @section('content')
     {{-- breadcrumbs --}}
     <div class="mt-5 w-75 d-block m-auto">
-        @if (Session::get('failed'))
+        @if (Session::get('error'))
             <div class="alert alert-danger">
-                {{ Session::get('failed') }}
+                {{ Session::get('error') }}
             </div>
         @endif
         <nav data-mdb-navbar-init class="navbar navbar-expand-lg bg-body-tertiary">

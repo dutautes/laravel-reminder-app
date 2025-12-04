@@ -7,9 +7,9 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-    @if (Session::get('failed'))
+    @if (Session::get('error'))
         <div class="alert alert-danger">
-            {{ Session::get('failed') }}
+            {{ Session::get('error') }}
         </div>
     @endif
     <div class="container mt-3">
@@ -71,19 +71,31 @@
                                 <label for="name" class="form-label">Nama:</label>
                                 <input type="text" name="name" id="name"
                                     class="form-control @error('name') is-invalid
-                                @enderror">
+                                @enderror"
+                                    value="{{ old('name') }}">
+                                @error('name')
+                                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email:</label>
                                 <input type="email" name="email" id="email"
                                     class="form-control @error('email') is-invalid
-                                @enderror">
+                                @enderror"
+                                    value="{{ old('email') }}">
+                                @error('email')
+                                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password:</label>
                                 <input type="password" name="password" id="password"
                                     class="form-control @error('password') is-invalid
-                                @enderror">
+                                @enderror"
+                                    value="{{ old('password') }}">
+                                @error('password')
+                                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
                         <div class="modal-footer">

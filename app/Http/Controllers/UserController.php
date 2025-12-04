@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Exports\UserExport;
-use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\UserActivity;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel; // class laravel excel
 use Yajra\DataTables\Facades\DataTables; // class laravel yajra : datatables
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -204,6 +205,14 @@ class UserController extends Controller
             if (Auth::user()->role == 'admin') {
                 return redirect()->route('admin.dashboard')->with('success', 'Berhasil login!');
             } else {
+                // log activity
+                $log = new UserActivity();
+                $log->saveActivity(
+                    'login',
+                    'User melakukan login',
+                    'User',
+                    auth()->id()
+                );
                 return redirect()->route('dashboard')->with('success', 'Berhasil login!');
             }
         } else {
@@ -213,7 +222,19 @@ class UserController extends Controller
 
     public function logout()
     {
+        $userId = auth()->id(); // simpan id sebelum logout
+
+        // log activity
+        $log = new UserActivity();
+        $log->saveActivity(
+            'logout',
+            'User melakukan logout',
+            'User',
+            $userId
+        );
+
         Auth::logout();
+
         return redirect()->route('home')->with('logout', 'Berhasil logout!, silahkan login kembali untuk akses lengkap');
     }
 
@@ -225,11 +246,15 @@ class UserController extends Controller
 
     public function datatables()
     {
-        $users = User::where('role', 'user');
+        $users = User::query();
         return DataTables::of($users)
             ->addIndexColumn()
             ->addColumn('role_badge', function ($user) {
-                return '<span class="badge bg-secondary">' . $user['role'] . '</span>';
+                if ($user['role'] == 'admin') {
+                    return '<span class="badge bg-primary">' . $user['role'] . '</span>';
+                } else {
+                    return '<span class="badge bg-secondary">' . $user['role'] . '</span>';
+                }
             })
             ->addColumn('action', function ($user) {
                 $btnEdit = '<a href="' . route('admin.users.edit', $user->id) . '" class="btn btn-primary">Edit</a>';
@@ -326,6 +351,7 @@ class UserController extends Controller
         }
     }
 
+    // hapus akun sendiri
     public function deleteAccount(Request $request)
     {
         $request->validate(
