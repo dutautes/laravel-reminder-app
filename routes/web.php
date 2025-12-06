@@ -39,14 +39,14 @@ Route::middleware('auth')->group(function () {
 
     // profile
     Route::prefix('/user')->name('user.')->group(function () {
-        // settings
-        Route::get('/settings', [UserController::class, 'settings'])->name('settings');
-        // update
-        Route::post('/settings', [UserController::class, 'updateProfile'])->name('update_profile');
         // delete
         Route::delete('/delete', [UserController::class, 'deleteAccount'])->name('delete_account');
         // profile
         Route::get('/profile', [UserController::class, 'profile'])->name('profile');
+        // update email, profile, password
+        Route::post('/settings', [UserController::class, 'updateProfile'])->name('update_profile');
+        Route::post('/profile/update-email', [UserController::class, 'updateEmail'])->name('update_email');
+        Route::post('/profile/update-password', [UserController::class, 'updatePassword'])->name('update_password');
         // account
         Route::get('/account', [UserController::class, 'account'])->name('account');
     });
@@ -54,6 +54,7 @@ Route::middleware('auth')->group(function () {
 
 // isAdmin
 Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function () {
+    // chart data grafik reminder user
     Route::get('/reminders/chart', [UserController::class, 'chartData'])->name('reminders.chart');
 
     Route::get('/dashboard', function () {
@@ -62,6 +63,8 @@ Route::middleware('isAdmin')->prefix('/admin')->name('admin.')->group(function (
 
     // activities
     Route::get('/activities', [UserActivityController::class, 'index'])->name('activities.index');
+    // data tables
+    Route::get('/datatables', [UserActivityController::class, 'datatablesActivity'])->name('datatables_activity');
 
     // data user
     Route::prefix('/users')->name('users.')->group(function () {

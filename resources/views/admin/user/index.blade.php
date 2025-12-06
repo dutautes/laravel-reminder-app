@@ -12,47 +12,51 @@
             {{ Session::get('error') }}
         </div>
     @endif
-    <div class="container mt-3">
+    <div class="container w-75 mt-3">
         <div class="d-flex justify-content-end mb-3 mt-4">
             <a href="{{ route('admin.users.export') }}" class="btn btn-secondary me-2">Export (.xlsx)</a>
             <a href="{{ route('admin.users.trash') }}" class="btn btn-warning me-2">Data Sampah</a>
             <a href="" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalAdd">Tambah Data</a>
         </div>
 
-        <h3>Data Pengguna</h3>
-        <table class="table table-bordered table-info" id="usersTable">
-            <tr>
-                <th>#</th>
-                <th>Nama</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Aksi</th>
-            </tr>
-            @foreach ($users as $key => $user)
+        <h3 class="text-2xl mt-2">Data Pengguna</h3>
+        <table class="table table-bordered" id="usersTable">
+            <thead class="table-dark">
                 <tr>
-                    <td>{{ $key + 1 }}</td>
-                    <td>{{ $user['name'] }}</td>
-                    <td>{{ $user['email'] }}</td>
-                    @if ($user['role'] == 'admin')
-                        <td>
-                            <span class="badge bg-primary">{{ $user['role'] }}</span>
-                        </td>
-                    @endif
-                    @if ($user['role'] == 'user')
-                        <td>
-                            <span class="badge bg-secondary">{{ $user['role'] }}</span>
-                        </td>
-                    @endif
-                    <td class="d-flex gap-2 justify-content-center">
-                        <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-primary mb-3">Edit</a>
-                        <form action="{{ route('admin.users.delete', $user->id) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger ms-2">Hapus</button>
-                        </form>
-                    </td>
+                    <th>#</th>
+                    <th>Nama</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Aksi</th>
                 </tr>
-            @endforeach
+            </thead>
+            <tbody>
+                @foreach ($users as $key => $user)
+                    <tr>
+                        <td>{{ $key + 1 }}</td>
+                        <td>{{ $user['name'] }}</td>
+                        <td>{{ $user['email'] }}</td>
+                        @if ($user['role'] == 'admin')
+                            <td>
+                                <span class="badge bg-primary">{{ $user['role'] }}</span>
+                            </td>
+                        @endif
+                        @if ($user['role'] == 'user')
+                            <td>
+                                <span class="badge bg-secondary">{{ $user['role'] }}</span>
+                            </td>
+                        @endif
+                        <td class="d-flex gap-2 justify-content-center">
+                            <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-primary mb-3">Edit</a>
+                            <form action="{{ route('admin.users.delete', $user->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger ms-2">Hapus</button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
         </table>
 
         {{-- modal TAMBAH --}}
@@ -121,6 +125,7 @@
             new bootstrap.Modal(modalEdit).show();
         </script>
     @endif
+
     <script>
         $(function() {
             $('#usersTable').DataTable({

@@ -17,11 +17,18 @@ class Reminder extends Model
         'description',
         'due_at',
         'repeat',
-        'status'
+        'status',
+        'completed_at',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    // casts mengubah tipe data completed_at
+    protected function casts(): array
+    {
+        return ['completed_at' => 'datetime'];
     }
 }

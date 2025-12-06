@@ -1,7 +1,7 @@
 @extends('templates.app')
 
 @section('content')
-    <div class="container my-4">
+    <div class="container w-75 my-4">
         <h2>Edit Reminder</h2>
 
         <form action="{{ route('reminder.update', $reminder->id) }}" method="POST">

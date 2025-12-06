@@ -53,7 +53,7 @@ class User extends Authenticatable
         ];
     }
 
-    // helper
+    // helper method custoM
     public function profilePhotoUrl()
     {
         if ($this->profile_photo && Storage::disk('public')->exists($this->profile_photo)) {
@@ -61,7 +61,7 @@ class User extends Authenticatable
         }
 
         $name = $this->name ?? $this->username ?? 'User';
-        $encodedName = urlencode($name);
+        $encodedName = urlencode($name); // contoh hasil urlencode duta+suksesi , kalo engga duta suksesi di url nya browser ngambil duta doag
         return "https://ui-avatars.com/api/?name={$encodedName}&background=0D8ABC&color=fff&rounded=true&size=256";
     }
 

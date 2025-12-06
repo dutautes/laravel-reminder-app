@@ -21,7 +21,7 @@
         </nav>
     </div>
 
-    <div class="container my-3">
+    <div class="container my-3 w-75">
         <h3>Edit Data Table</h3>
         <form action="{{ route('admin.users.update', $user->id) }}" method="POST">
             @csrf

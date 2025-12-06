@@ -19,7 +19,7 @@ class UserActivity extends Model
         return $this->belongsTo(User::class);
     }
 
-    // helper method model
+    // helper method model, buat user activity
     public function saveActivity($action, $desc, $refType = null, $refId = null)
     {
         $this->user_id = auth()->id();

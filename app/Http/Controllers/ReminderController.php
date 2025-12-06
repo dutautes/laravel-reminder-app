@@ -53,6 +53,7 @@ class ReminderController extends Controller
             'description' => $request->description,
             'due_at' => $request->due_at,
             'repeat' => $request->repeat,
+            'completed_at' => null,
             'status' => 0,
         ]);
 
@@ -66,9 +67,9 @@ class ReminderController extends Controller
         );
 
         if ($createData) {
-            return redirect()->route('reminder.index')->with('success', 'Data pengguna berhasil ditambahkan');
+            return redirect()->route('reminder.index')->with('success', 'Reminder berhasil ditambahkan');
         } else {
-            return redirect()->back()->with('error', 'Gagal menambahkan data pengguna');
+            return redirect()->back()->with('error', 'Gagal menambahkan reminder');
         }
     }
 
@@ -108,6 +109,9 @@ class ReminderController extends Controller
             'repeat' => 'Repeat wajib dipilih'
         ]);
 
+        // ambil id reminder
+        $reminder = Reminder::findOrFail($id);
+
         $updateData = Reminder::where('id', $id)->update([
             'user_id' => Auth::id(),
             'title' => $request->title,
@@ -117,18 +121,18 @@ class ReminderController extends Controller
         ]);
 
         // log activity
-        // $log = new UserActivity();
-        // $log->saveActivity(
-        //     'update_reminder',
-        //     'Mengubah reminder',
-        //     'Reminder',
-        //     $updateData->id
-        // );
+        $log = new UserActivity();
+        $log->saveActivity(
+            'update_reminder',
+            'Mengubah reminder',
+            'Reminder',
+            $reminder->id
+        );
 
         if ($updateData) {
-            return redirect()->route('reminder.index')->with('success', 'Data pengguna berhasil di edit');
+            return redirect()->route('reminder.index')->with('success', 'Reminder berhasil di edit');
         } else {
-            return redirect()->back()->with('error', 'Gagal menambahkan data pengguna');
+            return redirect()->back()->with('error', 'Gagal edit reminder');
         }
     }
 
@@ -157,11 +161,18 @@ class ReminderController extends Controller
     {
         $reminder = Reminder::findOrFail($id);
 
-        // simpan status lama (biar tau berubah ke apa)
-        $oldStatus = $reminder->status;
-
         // toggle status
         $reminder->status = !$reminder->status;
+
+        // isi atau reset completed_at
+        if ($reminder->status == 1) {
+            // completed
+            $reminder->completed_at = now();
+        } else {
+            // un-complete
+            $reminder->completed_at = null;
+        } // save() = updateOrCreate()
+
         $reminder->save();
 
         // tentuin aksi nya

@@ -157,13 +157,14 @@
                                 <img src="{{ Auth::user()->profilePhotoUrl() }}"
                                     class="w-14 h-14 rounded-full mx-auto object-cover mb-1">
                                 <div class="font-medium text-gray-800">{{ Auth::user()->name }}</div>
-                                @if (Auth::user()->username)
-                                    <small class="text-gray-500">{{ '@' . Auth::user()->username }}</small>
+                                @if (Auth::user()->email)
+                                    <small
+                                        class="text-gray-500">{{ Auth::user()->username ?? Auth::user()->email }}</small>
                                 @endif
                             </div>
                             <a href="{{ route('user.profile') }}"
                                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil Saya</a>
-                            <a href="#"
+                            <a href="{{ route('user.account') }}"
                                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Pengaturan</a>
                             <hr>
                             <a href="{{ route('logout') }}"

@@ -47,6 +47,8 @@
                                     <span><i
                                             class="fa-regular fa-clock me-1"></i>{{ \Carbon\Carbon::parse($reminder->due_at)->format('h.i A') }}</span>
                                     <span><i class="fa-solid fa-repeat me-1"></i>{{ $reminder->repeat }}</span>
+                                    <span><i
+                                            class="fa-solid fa-check me-1"></i>{{ $reminder->completed_at ? $reminder->completed_at->format('M j, Y h.i A') : '-' }}</span>
                                 </div>
 
                                 {{-- toggle switch --}}
@@ -102,6 +104,8 @@
                                     <span><i
                                             class="fa-regular fa-clock me-1"></i>{{ \Carbon\Carbon::parse($reminder->due_at)->format('h.i A') }}</span>
                                     <span><i class="fa-solid fa-repeat me-1"></i>{{ $reminder->repeat }}</span>
+                                    <span><i
+                                            class="fa-solid fa-check me-1"></i>{{ $reminder->completed_at ? $reminder->completed_at->format('M j, Y h.i A') : '-' }}</span>
                                 </div>
 
                                 {{-- toggle switch --}}
@@ -144,19 +148,19 @@
                                     class="form-control @error('title') is-invalid
                                 @enderror"
                                     id="title" value="{{ old('title') }}">
-                                @error('title')
-                                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
-                                @enderror
+                                @if ($errors->has('title'))
+                                    <p class="text-danger mt-1">{{ $errors->first('title') }}</p>
+                                @endif
                             </div>
                             <div class="mb-3">
                                 <label for="description" class="form-label">Description:</label>
                                 <textarea type="text" name="description" cols="10" rows="10" id="description"
                                     class="form-control @error('description') is-invalid
                                 @enderror"
-                                    style="field-sizing: content;" value="{{ old('description') }}"></textarea>
-                                @error('description')
-                                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
-                                @enderror
+                                    style="field-sizing: content;">{{ old('description') }}</textarea>
+                                @if ($errors->has('description'))
+                                    <p class="text-danger mt-1">{{ $errors->first('description') }}</p>
+                                @endif
                             </div>
                             <div class="mb-3">
                                 <label for="due_at" class="form-label">Tanggal & Waktu:</label>
@@ -164,9 +168,9 @@
                                     class="form-control @error('due_at') is-invalid
                                 @enderror"
                                     value="{{ old('due_at') }}">
-                                @error('due_at')
-                                    <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
-                                @enderror
+                                @if ($errors->has('due_at'))
+                                    <p class="text-danger mt-1">{{ $errors->first('due_at') }}</p>
+                                @endif
                             </div>
                             <div class="mb-3">
                                 <label for="repeat" class="form-label">Repeat</label>
@@ -253,4 +257,18 @@
             transform: translateX(21px);
         }
     </style>
+@endpush
+
+@push('script')
+    {{-- pengecekan php, kalo ada error validasi apapun : $errors->any() --}}
+    @if ($errors->any())
+        <script>
+            document.addEventListener('DOMContentLoaded',
+                function() { // pake event ini, kalo engga id modal nya null belum ke render
+                    let modalAdd = document.getElementById('modalAdd');
+                    let modal = new bootstrap.Modal(modalAdd);
+                    modal.show();
+                });
+        </script>
+    @endif
 @endpush

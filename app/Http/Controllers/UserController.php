@@ -114,6 +114,7 @@ class UserController extends Controller
             return redirect()->back()->with('error', 'Gagal mengupdate data user');
         }
     }
+
     /**
      * Remove the specified resource from storage.
      */
@@ -127,12 +128,14 @@ class UserController extends Controller
         }
     }
 
+    // data sampah dari data user > admin
     public function trash()
     {
         $userTrash = User::onlyTrashed()->get();
         return view('admin.user.trash', compact('userTrash'));
     }
 
+    // softdeletes restore() data user > admin
     public function restore($id)
     {
         $user = User::onlyTrashed()->find($id);
@@ -140,6 +143,7 @@ class UserController extends Controller
         return redirect()->route('admin.users.index')->with('success', 'Berhasil mengembalikan data user');
     }
 
+    // delete data user forceDelete() data user > admin
     public function deletePermanent($id)
     {
         $user = User::onlyTrashed()->find($id);
@@ -147,6 +151,7 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'Berhasil menghapus data secara permanen!');
     }
 
+    // sign up
     public function signUp(Request $request)
     {
         // (Request $request) : class untuk mengambil value dari formulir
@@ -186,6 +191,7 @@ class UserController extends Controller
         }
     }
 
+    // login authentication anjay
     public function loginAuth(Request $request)
     {
         $request->validate(
@@ -220,6 +226,7 @@ class UserController extends Controller
         }
     }
 
+    // logout
     public function logout()
     {
         $userId = auth()->id(); // simpan id sebelum logout
@@ -238,12 +245,14 @@ class UserController extends Controller
         return redirect()->route('home')->with('logout', 'Berhasil logout!, silahkan login kembali untuk akses lengkap');
     }
 
+    // export Excel di data user > admin
     public function export()
     {
         $fileName = 'data-user-reminder.xlsx';
         return Excel::download(new UserExport, $fileName);
     }
 
+    // datatables buat data user di dalam admin
     public function datatables()
     {
         $users = User::query();
@@ -269,12 +278,55 @@ class UserController extends Controller
             ->make(true);
     }
 
-    public function settings()
+    // update email mandiri di account
+    public function updateEmail(Request $request)
     {
         $user = Auth::user();
-        return view('user.settings', compact('user'));
+
+        $request->validate(
+            [
+                'email' => 'email:dns|unique:users,email,' . Auth::id() // Cek email di tabel users, pastikan email belum dipakai orang lain, kecuali user dengan ID ini (user yang lagi login).
+            ],
+            [
+                'email.email' => 'Email wajib diisi dengan data yang valid',
+                'email.unique' => 'Email sudah digunakan akun lain'
+            ]
+        );
+
+        // Cek kalau email sama
+        if ($request->email === $user->email) {
+            return back()->with('error', 'Email tidak ada perubahan.');
+        }
+
+        $user->update([
+            'email' => $request->email,
+        ]);
+
+
+        return back()->with('success', 'Berhasil mengubah akun email!');
     }
 
+    // update password mandiri di account
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'min:8|confirmed',
+        ], [
+            'password.min' => 'Password minimal 8 karakter.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.',
+        ]);
+
+        $user = Auth::user();
+
+        // Update password
+        $user->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        return back()->with('success', 'Password berhasil diperbarui.');
+    }
+
+    // update profile
     public function updateProfile(Request $request)
     {
         $user = User::find(Auth::id()); // ambil data user yang sedang login
@@ -289,8 +341,6 @@ class UserController extends Controller
                 'headline' => 'nullable|string|max:255',
                 'about' => 'nullable|string|max:1000',
                 'profile_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-                'password' => 'nullable|confirmed|min:8',
-                'email' => 'nullable|email|max:255',
             ],
             [
                 'name.required' => 'Nama wajib diisi',
@@ -298,10 +348,6 @@ class UserController extends Controller
                 'profile_photo.image' => 'File harus berupa gambar',
                 'profile_photo.mimes' => 'Format gambar harus jpg/jpeg/png',
                 'profile_photo.max' => 'Ukuran gambar maksimal 2MB',
-                'password.min' => 'Password minimal 8 karakter',
-                'password.confirmed' => 'Konfirmasi password tidak cocok',
-                'email.email' => 'Email tidak valid',
-                'email.max' => 'Email maksimal 255 karakter',
             ]
         );
 
@@ -322,23 +368,6 @@ class UserController extends Controller
             $filename = 'user-' . Auth::id() . '.' . $request->file('profile_photo')->getClientOriginalExtension(); // nama file foto
             $path = $request->file('profile_photo')->storeAs('profile_photos', $filename, 'public');
             $data['profile_photo'] = $path;
-        }
-
-        // Handle password (jika diisi)
-        if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->password);
-        }
-
-        // Handle email (jika diisi)
-        if ($request->filled('email')) {
-            if ($request->email === $user->email) {
-                return redirect()->back()->with('error', 'Email baru tidak berubah.');
-            } else {
-                $data['email'] = $request->email;
-            }
-        } else {
-            // kalau kosong, pertahankan email lama biar gak null
-            $data['email'] = $user->email;
         }
 
         // Update
@@ -389,19 +418,21 @@ class UserController extends Controller
         }
     }
 
+    // profile
     public function profile()
     {
         $user = Auth::user();
         return view('user.profile', compact('user'));
     }
 
+    // ini pengaturan akun di profile
     public function account()
     {
         $user = Auth::user();
         return view('user.account', compact('user'));
     }
 
-    // chartbar di admin
+    // data chartbar di admin
     public function chartData()
     {
         $chartData = User::withCount('reminders')->get(); // menghitung jumlah reminder yang dimiliki oleh masing masing user

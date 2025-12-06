@@ -10,9 +10,9 @@
                     <div class="card-body">
                         <h4 class="mb-4 fw-semibold">Profil Pengguna</h4>
 
-                        @if (Session::get('failed'))
+                        @if (Session::get('error'))
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">d
-                                {{ Session::get('failed') }}
+                                {{ Session::get('error') }}
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                             </div>
                         @endif
